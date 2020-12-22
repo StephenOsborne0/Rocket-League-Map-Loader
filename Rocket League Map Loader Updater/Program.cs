@@ -10,22 +10,30 @@ namespace Rocket_League_Map_Loader_Updater
     {
         static void Main(string[] args)
         {
-            if(args == null || args.Length != 1)
-                return;
+            try
+            {
+                if(args == null || args.Length != 1)
+                    return;
 
-            WaitForClose();
+                WaitForClose();
 
-            var updateZip = args[0];
-            Update(updateZip);
+                var updateZip = args[0];
+                Update(updateZip);
 
-            Console.WriteLine();
-            Console.Write("Launching Rocket League Map Loader...");
-            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Rocket League Map Loader.exe");
-            Process.Start(filePath);
+                Console.WriteLine();
+                Console.Write("Launching Rocket League Map Loader...");
+                var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Rocket League Map Loader.exe");
+                Process.Start(filePath);
 
 #if (DEBUG)
-            Console.ReadLine();
+                Console.ReadLine();
 #endif
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+                Console.ReadLine();
+            }
         }
 
         private static void WaitForClose()

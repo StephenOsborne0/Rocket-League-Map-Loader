@@ -81,7 +81,7 @@ namespace Rocket_League_Map_Loader
                 StartInfo = new ProcessStartInfo
                 { 
                     FileName = updater,
-                    Arguments = tempFile
+                    Arguments = $"\"{tempFile}\""
                 }
             };
 
