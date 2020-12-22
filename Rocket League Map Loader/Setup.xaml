@@ -1,0 +1,83 @@
+﻿<Window x:Class="Rocket_League_Map_Loader.Setup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Rocket_League_Map_Loader"
+        mc:Ignorable="d"
+        Title="Rocket League Mod Manager - Setup" Height="450" Width="800" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"
+        Icon="Resources/xChaosModsLogo.ico">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="60"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="1" Content="Step 1: Find your rocket league directory" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"></Label>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="9*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Column="0" Height="20" Margin="20" Name="RocketLeagueDirectoryTextbox" Text="C:\Program Files\Steam\steamapps\common\rocketleague" TextChanged="RocketLeagueDirectoryTextbox_OnTextChanged"></TextBox>
+                <Image Grid.Column="1" Name="RocketLeagueDirectoryExistsIcon" Source="Resources/error.ico" Height="25" Width="25" Margin="-50 10 10 10"></Image>
+            </Grid>
+            <Button Grid.Column="1" Height="20" Margin="20" Content="Auto-find" Name="AutoFindButton" Click="AutoFindButton_OnClick"></Button>
+            <Button Grid.Column="2" Height="20" Margin="20" Content="Browse" Name="BrowseButton" Click="BrowseButton_OnClick"></Button>
+        </Grid>
+
+        <Label Grid.Row="3" Content="Step 2: Install the following" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"></Label>
+
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Button Grid.Column="1" Grid.Row="0" Height="30" Margin="20" Content="Hamachi" Name="HamachiButton" Click="HamachiButton_OnClick"></Button>
+            <TextBlock Grid.Column="1" Grid.Row="1" Text="Required for multiplayer mods" TextWrapping="WrapWithOverflow" TextAlignment="Center" Foreground="White"></TextBlock>
+            <Image Grid.Column="2" Grid.Row="0" Name="HamachiDirectoryExistsIcon" Source="Resources/error.ico" Height="25" Width="25" Margin="-80 10 10 10"></Image>
+
+            <Button Grid.Column="3" Grid.Row="0" Height="30" Margin="20" Content="BakkesMod" Name="BakkesModButton" Click="BakkesModButton_OnClick"></Button>
+            <TextBlock Grid.Column="3" Grid.Row="1" Text="Required to do moddy stuff in game. It has a lot of functionality." TextWrapping="WrapWithOverflow" TextAlignment="Center" Foreground="White"></TextBlock>
+            <Image Grid.Column="4" Grid.Row="0" Name="BakkesModDirectoryExistsIcon" Source="Resources/error.ico" Height="25" Width="25" Margin="-80 10 10 10"></Image>
+
+            <Button Grid.Column="5" Grid.Row="0" Height="30" Margin="20" Content="Rocket Plugin" Name="RocketPluginButton" Click="RocketPluginButton_OnClick"></Button>
+            <TextBlock Grid.Column="5" Grid.Row="1" Text="A Bakkesmod plugin for joining, hosting and manipulating local games" TextWrapping="WrapWithOverflow" TextAlignment="Center" Foreground="White"></TextBlock>
+            <Image Grid.Column="6" Grid.Row="0" Name="RocketPluginDirectoryExistsIcon" Source="Resources/error.ico" Height="25" Width="25" Margin="-80 10 10 10"></Image>
+        </Grid>
+
+        <Grid Grid.Row="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="140"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="1" Height="20" Width="100" Margin="20" Content="Complete setup" Name="CompleteSetupButton" IsEnabled="False" Click="CompleteSetupButton_OnClick"></Button>
+        </Grid>
+    </Grid>
+</Window>

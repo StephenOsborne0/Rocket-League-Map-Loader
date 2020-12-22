@@ -1,0 +1,65 @@
+﻿<Window x:Class="Rocket_League_Map_Loader.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Rocket_League_Map_Loader"
+        xmlns:userControls="clr-namespace:Rocket_League_Map_Loader.User_Controls"
+        mc:Ignorable="d"
+        Title="Rocket League Mod Manager" Height="450" Width="800"
+        Icon="Resources/xChaosModsLogo.ico">
+
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="17"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0">
+            <Menu DockPanel.Dock="Top">
+
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Import">
+                        <MenuItem Header="_Unity Package" Name="ImportUnityPackageButton"></MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="_Restore default files" Name="RestoreDefaultFilesButton"/>
+                    <Separator />
+                    <MenuItem Header="_Exit" Name="ExitButton" Click="ExitButton_OnClick"/>
+                </MenuItem>
+
+                <MenuItem Header="_View">
+                    <MenuItem Header="_Mods folder" Name ="ViewModsFolderButton" Click="ViewModsFolderButton_OnClick"/>
+                    <MenuItem Header="_UPK file extractor" Name ="UPKFileExtractorButton" Click="UPKFileExtractorButton_OnClick"/>
+                </MenuItem>
+
+                <MenuItem Header="_About" Name="AboutButton" Click="AboutButton_OnClick"></MenuItem>
+
+                <!--<MenuItem Header="_Help"></MenuItem>-->
+
+            </Menu>
+            <TextBox AcceptsReturn="True" />
+        </DockPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <TabControl Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+                <TabItem Header="_Downloaded maps">
+                    <userControls:DownloadedMapsUserControl></userControls:DownloadedMapsUserControl>
+                </TabItem>
+                <TabItem Header="_Workshop maps">
+                    <userControls:WorkshopMapsUserControl></userControls:WorkshopMapsUserControl>
+                </TabItem>
+                <TabItem Header="_Lethamyr's maps">
+                    <userControls:LethamyrsMapsUserControl></userControls:LethamyrsMapsUserControl>
+                </TabItem>
+                <TabItem Header="_Community maps">
+                    <userControls:CommunityMapsUserControl></userControls:CommunityMapsUserControl>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </Grid>
+</Window>
