@@ -13,7 +13,7 @@ namespace Rocket_League_Map_Loader
     /// </summary>
     public partial class App : Application
     {
-        private static string ServerVersionUrl = "https://pastebin.com/tyKGSU4F";
+        private static string ServerVersionUrl = "https://pastebin.com/raw/tyKGSU4F";
         
         private bool IsUpdateAvailable
         {
@@ -26,8 +26,10 @@ namespace Rocket_League_Map_Loader
                 var serverVersionString = new WebClient().DownloadString(ServerVersionUrl).Split('|')[0];
 
                 if (Version.TryParse(serverVersionString, out var serverVersion))
-                    return serverVersion.Major >= currentVersion.Major &&
-                           serverVersion.Minor >= currentVersion.Minor;
+                    return (serverVersion.Major >= currentVersion.Major &&
+                           serverVersion.Minor >= currentVersion.Minor) &&
+                            (serverVersion.Major != currentVersion.Minor &&
+                                serverVersion.Minor != currentVersion.Minor);
 
                 return false;
             }
@@ -44,7 +46,7 @@ namespace Rocket_League_Map_Loader
             if(IsUpdateAvailable)
             {
                 Update();
-                Environment.Exit(0);
+                return;
             }
 
             AppState.RefreshDownloadedMaps();
@@ -78,15 +80,13 @@ namespace Rocket_League_Map_Loader
             {
                 StartInfo = new ProcessStartInfo
                 { 
+                    FileName = updater,
                     Arguments = tempFile
                 }
             };
 
             process.Start();
-
             Current.Shutdown();
-            //Start an external update process and exit this one
-            //External update needs to take in the update zip as an argument and install over this assembly
         }
     }
 }

@@ -26,21 +26,29 @@ namespace Rocket_League_Map_Loader_Updater
 
                 foreach (ZipEntry zipEntry in file)
                 {
-                    if (!zipEntry.IsFile)
-                        continue;
-
-                    var entryFileName = zipEntry.Name;
-                    var buffer = new byte[4096];
-                    var zipStream = file.GetInputStream(zipEntry);
-                    var fullZipToPath = Path.Combine(outputFolder, entryFileName);
-                    var directoryName = Path.GetDirectoryName(fullZipToPath);
-
-                    if (!String.IsNullOrEmpty(directoryName))
-                        Directory.CreateDirectory(directoryName);
-
-                    using (var streamWriter = File.Create(fullZipToPath))
+                    try
                     {
-                        StreamUtils.Copy(zipStream, streamWriter, buffer);
+                        if(!zipEntry.IsFile)
+                            continue;
+
+                        var entryFileName = zipEntry.Name;
+                        Console.WriteLine($"Extracting {zipEntry.Name}");
+                        var buffer = new byte[4096];
+                        var zipStream = file.GetInputStream(zipEntry);
+                        var fullZipToPath = Path.Combine(outputFolder, entryFileName);
+                        var directoryName = Path.GetDirectoryName(fullZipToPath);
+
+                        if(!String.IsNullOrEmpty(directoryName))
+                            Directory.CreateDirectory(directoryName);
+
+                        using(var streamWriter = File.Create(fullZipToPath))
+                        {
+                            StreamUtils.Copy(zipStream, streamWriter, buffer);
+                        }
+                    }
+                    catch
+                    {
+                        //Added try to avoid updater overwriting it's own files
                     }
                 }
             }

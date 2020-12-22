@@ -15,11 +15,17 @@ namespace Rocket_League_Map_Loader_Updater
 
             WaitForClose();
 
-            var updateZip = args[1];
+            var updateZip = args[0];
             Update(updateZip);
 
+            Console.WriteLine();
+            Console.Write("Launching Rocket League Map Loader...");
             var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Rocket League Map Loader.exe");
             Process.Start(filePath);
+
+#if (DEBUG)
+            Console.ReadLine();
+#endif
         }
 
         private static void WaitForClose()
@@ -36,6 +42,12 @@ namespace Rocket_League_Map_Loader_Updater
             }
         }
 
-        private static void Update(string updateFile) => FileHelper.ExtractZipFile(updateFile, null, AppDomain.CurrentDomain.BaseDirectory);
+        private static void Update(string updateFile)
+        {
+            Console.WriteLine("Updating");
+            Console.WriteLine($"Extracting {updateFile}...");
+            FileHelper.ExtractZipFile(updateFile, null, AppDomain.CurrentDomain.BaseDirectory);
+            Console.WriteLine("Update completed.");
+        }
     }
 }
