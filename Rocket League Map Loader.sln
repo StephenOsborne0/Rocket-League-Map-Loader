@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rocket League Map Loader", "Rocket League Map Loader\Rocket League Map Loader.csproj", "{F1C78266-D89C-458B-80FE-C6FF6C718147}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rocket League Map Loader Updater", "Rocket League Map Loader Updater\Rocket League Map Loader Updater.csproj", "{4C9E7524-35C8-4372-BC73-496F4CA9DBDE}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{97A31405-F4B2-4C77-83C6-F65464A1664D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,8 @@ Global
 		{F1C78266-D89C-458B-80FE-C6FF6C718147}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1C78266-D89C-458B-80FE-C6FF6C718147}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1C78266-D89C-458B-80FE-C6FF6C718147}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4C9E7524-35C8-4372-BC73-496F4CA9DBDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4C9E7524-35C8-4372-BC73-496F4CA9DBDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4C9E7524-35C8-4372-BC73-496F4CA9DBDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4C9E7524-35C8-4372-BC73-496F4CA9DBDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97A31405-F4B2-4C77-83C6-F65464A1664D}.Debug|Any CPU.ActiveCfg = Debug
+		{97A31405-F4B2-4C77-83C6-F65464A1664D}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

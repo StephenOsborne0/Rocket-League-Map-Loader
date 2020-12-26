@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using Rocket_League_Map_Loader.Models;
+using RL_Map_Loader.Models;
 
-namespace Rocket_League_Map_Loader
+namespace RL_Map_Loader
 {
     /// <summary>
     /// Interaction logic for MapInfo.xaml

@@ -1,15 +1,11 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows;
-using Rocket_League_Map_Loader.Helpers;
-using Rocket_League_Map_Loader.Models;
+using RL_Map_Loader.Helpers;
+using RL_Map_Loader.Models;
 using MessageBox = System.Windows.MessageBox;
 using UserControl = System.Windows.Controls.UserControl;
 
-namespace Rocket_League_Map_Loader.User_Controls
+namespace RL_Map_Loader.User_Controls
 {
     /// <summary>
     /// Interaction logic for MapUserControl.xaml
@@ -23,49 +19,46 @@ namespace Rocket_League_Map_Loader.User_Controls
             _map = map;
             InitializeComponent();
             RefreshUserControlUi();
+            Map.DownloadCompleted += OnDownloadCompleted;
+            Events.MapDeleted += OnMapDeleted;
         }
 
         public void RefreshUserControlUi()
         {
-            DownloadButton.Visibility = _map != null && _map.Directory == null && _map.DownloadLink != null ? Visibility.Visible : Visibility.Hidden;
-            InstallButton.Visibility = _map?.Directory != null ? Visibility.Visible : Visibility.Hidden;
-            DeleteButton.Visibility = _map?.Directory != null ? Visibility.Visible : Visibility.Hidden;
-
-            MapNameTextbox.Content = _map?.Name ?? "N/A";
-
-            if(_map?.ShortDescription != null)
+            Dispatcher.Invoke(() =>
             {
-                MapDescriptionTextbox.Text = _map.ShortDescription;
-            }
-            else if(_map?.Info?.desc != null)
-            {
-                MapDescriptionTextbox.Text = _map.Info.desc;
-            }
-            else
-            {
-                MapDescriptionTextbox.Text = "N/A";
-            }
+                DownloadButton.Visibility = _map != null && _map.Directory == null && _map.GoogleDriveId != null ? Visibility.Visible : Visibility.Hidden;
+                LoadButton.Visibility = _map?.Directory != null ? Visibility.Visible : Visibility.Hidden;
+                //DeleteButton.Visibility = _map?.Directory != null ? Visibility.Visible : Visibility.Hidden;
 
-            MapImageBox.Source = _map?.Image;
-            UpkUdkLabel.Content = _map?.MapFilePath != null ? Path.GetExtension(_map.MapFilePath).TrimStart('.') : "N/A";
+                MapNameTextbox.Content = _map?.Name ?? "N/A";
 
-            if (_map?.MapFilePath == null)
-                return;
+                if (_map?.ShortDescription != null)
+                {
+                    MapDescriptionTextbox.Text = _map.ShortDescription;
+                }
+                else if (_map?.Info?.desc != null)
+                {
+                    MapDescriptionTextbox.Text = _map.Info.desc;
+                }
+                else
+                {
+                    MapDescriptionTextbox.Text = "N/A";
+                }
 
-            UpkUdkLabel.Content = Path.GetExtension(_map.MapFilePath).TrimStart('.').ToUpper();
+                MapImageBox.Source = _map?.Image;
+                UpkUdkLabel.Content = _map?.MapFilePath != null ? Path.GetExtension(_map.MapFilePath).TrimStart('.') : string.Empty;
+
+                if (_map?.MapFilePath == null)
+                    return;
+
+                UpkUdkLabel.Content = Path.GetExtension(_map.MapFilePath).TrimStart('.').ToUpper();
+            });
         }
 
-        private void DownloadButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            if(Task.Run(() =>!_map.Download()).Result) 
-                return;
+        private void DownloadButton_OnClick(object sender, RoutedEventArgs e) => _map.Download();
 
-            _map.Save();
-            RefreshUserControlUi();
-            AppState.RefreshDownloadedMaps();
-        }
-
-        private void InstallButton_OnClick(object sender, RoutedEventArgs e)
+        private void LoadButton_OnClick(object sender, RoutedEventArgs e)
         {
             if(_map?.Directory == null) 
                 return;
@@ -88,5 +81,19 @@ namespace Rocket_League_Map_Loader.User_Controls
         }
 
         private void ViewInfoButton_OnClick(object sender, RoutedEventArgs e) => new MapInfoForm(_map).Show();
+
+        private void OnDownloadCompleted(Map.DownloadCompletedEventArgs e)
+        {
+            if (_map != e.Map)
+                return;
+
+            RefreshUserControlUi();
+            AppState.RefreshDownloadedMaps();
+        }
+
+        private void OnMapDeleted(Events.MapDeletedEventArgs e)
+        {
+
+        }
     }
 }

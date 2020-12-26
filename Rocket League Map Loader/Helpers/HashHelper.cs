@@ -1,11 +1,30 @@
-﻿namespace Rocket_League_Map_Loader.Helpers
+﻿using System;
+using System.IO;
+using System.Security.Cryptography;
+
+namespace RL_Map_Loader.Helpers
 {
     public class HashHelper
     {
         public static string GenerateHash(string filepath)
         {
-            //Example
-            return "6a204bd89f3c8348afd5c77c717a097a";
+            try
+            {
+                using (var md5 = MD5.Create())
+                {
+                    using (var stream = File.OpenRead(filepath))
+                    {
+                        var hash = md5.ComputeHash(stream);
+                        return BitConverter.ToString(hash).Replace("-", "");
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+                return string.Empty;
+                //throw;
+            }
         }
     }
 }

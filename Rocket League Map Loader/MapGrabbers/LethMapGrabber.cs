@@ -6,10 +6,10 @@ using System.Net;
 using System.Windows.Media.Imaging;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
-using Rocket_League_Map_Loader.Models;
-using System.Web;
+using RL_Map_Loader.Extensions;
+using RL_Map_Loader.Models;
 
-namespace Rocket_League_Map_Loader.MapGrabbers
+namespace RL_Map_Loader.MapGrabbers
 {
     public class LethMapGrabber
     {
@@ -59,7 +59,8 @@ namespace Rocket_League_Map_Loader.MapGrabbers
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(Get(url));
 
-            var articles = htmlDoc.DocumentNode.Descendants("article");
+            var documentNode = htmlDoc.DocumentNode;
+            var articles = documentNode.Descendants("article");
 
             foreach(HtmlNode article in articles)
             {
@@ -72,41 +73,28 @@ namespace Rocket_League_Map_Loader.MapGrabbers
                     Maps.Add(map);
             }
 
-            var olderNodes = htmlDoc.DocumentNode.Descendants().Where(x => x.HasClass("older"));
+            var nextNode = documentNode.GetLastDescendantByClass("older");
+            var nextHref = nextNode?.GetSecondChild()?.GetAttributeValue("href", null);
 
-            if(!olderNodes.Any())
-                return;
-
-            var nextNode = olderNodes?.LastOrDefault();
-
-            if(nextNode != null && nextNode.ChildNodes != null && nextNode.ChildNodes?.Count > 1)
-            {
-                var nextHref = nextNode.ChildNodes[1].GetAttributeValue("href", null);
-
-                if (nextHref != null)
-                    GetNextPage($"https://lethamyr.com{nextHref}");
-            }
+            if (nextHref != null)
+                GetNextPage($"https://lethamyr.com{nextHref}");
         }
 
         private Map ParseArticle(HtmlNode article)
         {
             var map = new Map();
-
-            var titleNode = article.Descendants("h1").FirstOrDefault();
+            var titleNode = article.GetFirstDescendantByTagName("h1");
 
             if(titleNode == null)
                 return null;
 
-            map.Name = titleNode.ChildNodes[1].InnerText.Replace("\n", "").Trim();
+            map.Name = titleNode.GetSecondChild().InnerText.Replace("\n", "").Trim();
+            var mapCacheFileName = Path.Combine(AppState.MapCacheDirectory, $"{map.Name}.json");
 
-            var alreadyDownloadedMap = AppState.DownloadedMaps.SingleOrDefault(x => x.Name == map.Name);
+            if(File.Exists(mapCacheFileName))
+                return Map.Load(mapCacheFileName);
 
-            if (alreadyDownloadedMap != null)
-                return alreadyDownloadedMap;
-
-            var imageNode = article.Descendants("img").FirstOrDefault();
-
-            var imageSrc = imageNode?.GetAttributeValue("data-src", null);
+            var imageSrc = article.GetFirstDescendantByTagName("img")?.GetAttributeValue("data-src", null);
 
             if (imageSrc != null)
             {
@@ -116,13 +104,14 @@ namespace Rocket_League_Map_Loader.MapGrabbers
                 map.Image = new BitmapImage();
                 map.Image.BeginInit();
                 map.Image.StreamSource = stream;
+                //map.SaveImageSource(AppState.MapCacheDirectory, $"{map.Name}.bin");
                 map.Image.EndInit();
             }
 
-            var mapHref = titleNode.ChildNodes[1].GetAttributeValue("href", null);
+            var mapHref = titleNode.GetSecondChild().GetAttributeValue("href", null);
             map.Webpage = $"https://lethamyr.com{mapHref}";
 
-            var blogCategoryListNode = article.Descendants().FirstOrDefault(x => x.HasClass("blog-categories-list"));
+            var blogCategoryListNode = article.GetFirstDescendantByClass("blog-categories-list");
 
             if(blogCategoryListNode != null)
             {
@@ -130,7 +119,7 @@ namespace Rocket_League_Map_Loader.MapGrabbers
                     map.BlogCategories.Add(blogCategoryNode.InnerText);
             }
 
-            var descriptionNode = article.Descendants().First(x => x.HasClass("blog-excerpt-wrapper"));
+            var descriptionNode = article.GetFirstDescendantByClass("blog-excerpt-wrapper");
             map.ShortDescription = descriptionNode.ChildNodes.First().InnerText;
 
             return map;
@@ -141,18 +130,22 @@ namespace Rocket_League_Map_Loader.MapGrabbers
             if(map.Webpage == null)
                 return;
 
+            var mapCacheFileName = Path.Combine(AppState.MapCacheDirectory, $"{map.Name}.json");
+
+            if (File.Exists(mapCacheFileName))
+                return;
+
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(Get(map.Webpage));
 
-            var downloadNode = htmlDoc.DocumentNode.Descendants("a").First(x => x.InnerText.Contains("Download"));
-            var downloadHref = downloadNode?.GetAttributeValue("href", null);
-            var googleDriveId = downloadHref.Split('/')[5];
-            var directDownloadLink = $"https://docs.google.com/uc?export=download&id={googleDriveId}";
-            map.DownloadLink = directDownloadLink;
+            var documentNode = htmlDoc.DocumentNode;
 
-            var authorNode = htmlDoc.DocumentNode.Descendants("meta").First(x => x.GetAttributeValue("itemprop", null) == "author");
-            var shortDescriptionNode = htmlDoc.DocumentNode.Descendants("meta").First(x => x.GetAttributeValue("itemprop", null) == "description");
-            var datePublishedNode = htmlDoc.DocumentNode.Descendants("meta").First(x => x.GetAttributeValue("itemprop", null) == "datePublished");
+            var downloadHref = documentNode.GetFirstDescendantByTagNameWithInnerText("a", "Download")?.GetAttributeValue("href", null);
+            map.GoogleDriveId = downloadHref.Split('/')[5];
+
+            var authorNode = documentNode.GetFirstDescendantOfTypeWithAttribute("meta", "itemprop", "author");
+            var shortDescriptionNode = documentNode.GetFirstDescendantOfTypeWithAttribute("meta", "itemprop", "description");
+            var datePublishedNode = documentNode.GetFirstDescendantOfTypeWithAttribute("meta", "itemprop", "datePublished");
 
             map.Info = new MapInfo
             {
@@ -163,39 +156,47 @@ namespace Rocket_League_Map_Loader.MapGrabbers
             DateTime.TryParse(datePublishedNode.GetAttributeValue("content", string.Empty), out var datePublished);
             map.DatePublished = datePublished;
 
-            var article = htmlDoc.DocumentNode.Descendants("article").First();
-            var dataBlocks = article.Descendants().Where(x => x.HasClass("sqs-block-content"));
+            var article = documentNode.GetFirstDescendantByTagName("article");
+            var dataBlocks = article.GetDescendantsByClass("sqs-block-content");
 
-            foreach(var dataBlock in dataBlocks)
+            if(dataBlocks != null)
             {
-                var header = dataBlock.Descendants("h3").FirstOrDefault()?.InnerText;
-                var text = dataBlock.Descendants("p").FirstOrDefault()?.InnerText;
+                foreach (var dataBlock in dataBlocks)
+                {
+                    var header = dataBlock.GetFirstDescendantByTagName("h3")?.InnerText;
+                    var text = dataBlock.GetFirstDescendantByTagName("p")?.InnerText;
 
-                if(header != null && header == "Description")
-                    map.LongDescription = text;
+                    if (header != null && header == "Description")
+                        map.LongDescription = text;
 
-                if(header != null && header == "Recommended Settings")
-                    map.RecommendedSettings = text;
+                    if (header != null && header == "Recommended Settings")
+                        map.RecommendedSettings = text;
+                }
             }
 
-            var embedBlock = article.Descendants().FirstOrDefault(x => x.HasClass("embed-block"));
-            var json = embedBlock?.GetAttributeValue("data-block-json", null);
+            var youtubeEmbedJson = article.GetFirstDescendantByClass("embed-block")?.GetAttributeValue("data-block-json", null);
 
-            if(json != null)
+            if(youtubeEmbedJson != null)
             {
-                var embedData = JsonConvert.DeserializeObject<EmbedData>(System.Net.WebUtility.HtmlDecode(json));
+                var embedData = JsonConvert.DeserializeObject<EmbedData>(System.Net.WebUtility.HtmlDecode(youtubeEmbedJson));
                 map.YoutubeEmbed = embedData;
                 map.YoutubeUrl = embedData.url;
             }
 
-            var tagNodes = article.Descendants().Where(x => x.HasClass("blog-item-tag-wrapper"));
+            var tagNodes = article.GetDescendantsByClass("blog-item-tag-wrapper");
 
-            foreach(var tagNode in tagNodes)
+            if(tagNodes == null) 
+                return;
+
+            foreach (var tagNode in tagNodes)
             {
                 var tagAnchor = tagNode.ChildNodes.FirstOrDefault();
 
-                if (tagAnchor != null)
-                    map.Tags.Add(tagAnchor.InnerText); 
+                if(tagAnchor == null) 
+                    continue;
+
+                if (!map.Tags.Contains(tagAnchor.InnerText))
+                    map.Tags.Add(tagAnchor.InnerText);
             }
         }
     }

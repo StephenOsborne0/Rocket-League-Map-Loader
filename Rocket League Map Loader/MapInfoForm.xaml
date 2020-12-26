@@ -1,16 +1,16 @@
-﻿<Window x:Class="Rocket_League_Map_Loader.MapInfoForm"
+﻿<Window x:Class="RL_Map_Loader.MapInfoForm"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Rocket_League_Map_Loader"
         mc:Ignorable="d"
-        Title="Map Info" Height="450" Width="800">
+        Title="Map Info" Height="450" Width="800"
+        Icon="Resources/xchaoslogo.ico">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"></ColumnDefinition>
             <ColumnDefinition Width="1*"></ColumnDefinition>
-            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="4*"></ColumnDefinition>
             <ColumnDefinition Width="20"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
@@ -43,7 +43,7 @@
             <Label Content="N/A" Name="BlogCategoriesLabel" Margin="10 0 0 0"></Label>
             <Label Content="N/A" Name="TagsLabel" Margin="10 0 0 0"></Label>
             <Label Content="N/A" Name="ShortDescriptionLabel" Margin="10 0 0 0"></Label>
-            <TextBlock Text="N/A" Name="LongDescriptionLabel" Margin="15 0 0 0" TextWrapping="WrapWithOverflow"></TextBlock>
+            <TextBlock Text="N/A" Name="LongDescriptionLabel" MinHeight="50" Margin="15 5 0 0" TextWrapping="WrapWithOverflow"></TextBlock>
         </StackPanel>
     </Grid>
 </Window>

@@ -1,20 +1,20 @@
-﻿<Window x:Class="Rocket_League_Map_Loader.About"
+﻿<Window x:Class="RL_Map_Loader.About"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Rocket_League_Map_Loader"
         mc:Ignorable="d"
-        Title="About" Height="450" Width="800" 
-        Icon="Resources/xChaosModsLogo.ico">
+        Title="About" Height="600" Width="800"
+        Icon="Resources/xchaoslogo.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"></RowDefinition>
-            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="3*"></RowDefinition>
             <RowDefinition Height="2*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="2*"></RowDefinition>
             <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="4*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0" Content="Rocket League Mod Manager" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36"></Label>
@@ -30,6 +30,7 @@
 
         <Grid Grid.Row="5">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -49,7 +50,12 @@
                 <!--Youtube-->
                 <Image Source="Resources/youtube-logo.png"></Image>
             </Button>
+
+            <Button Grid.Column="3" Background="White" BorderBrush="Transparent" BorderThickness="0" Name="DiscordSocial" Click="DiscordSocial_OnClick">
+                <!--Discord-->
+                <Image Source="Resources/discord-logo.png"></Image>
+            </Button>
         </Grid>
-        
+        <TextBlock Grid.Row="6" Text="Disclaimer: I am not in any way associated with Epic Games, Psyonix, Rocket League, Hamachi, BakkesMod, Rocket Plugin, Steam, the Steam Workshop or Lethamyr.com. All copyrights and trademarks for their products belong to them. Same goes for the Ko-fi banner, Twitter, Twitch, YouTube and Discord logos and names. I am also not responsible or liable for your use of this program or if it breaks anything on your computer. By using this program you agree take responsibility for your own actions." VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Margin="20"></TextBlock>
     </Grid>
 </Window>

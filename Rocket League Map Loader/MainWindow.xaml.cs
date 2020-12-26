@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Windows;
+using static RL_Map_Loader.Helpers.InternetConnectionHelper;
 using Path = System.IO.Path;
 
-namespace Rocket_League_Map_Loader
+namespace RL_Map_Loader
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -20,5 +24,65 @@ namespace Rocket_League_Map_Loader
         private void AboutButton_OnClick(object sender, RoutedEventArgs e) => new About().ShowDialog();
 
         private void UPKFileExtractorButton_OnClick(object sender, RoutedEventArgs e) { throw new NotImplementedException(); }
+
+        private void ForceRestartRocketLeagueButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var processes = Process.GetProcesses();
+            var rocketLeagueProcess = processes.FirstOrDefault(x => x.ProcessName == "RocketLeague");
+
+            if(rocketLeagueProcess == null) 
+                return;
+
+            rocketLeagueProcess.Kill();
+
+            while (!rocketLeagueProcess.HasExited)
+                Thread.Sleep(100);
+
+            LaunchRocketLeagueButton_OnClick(sender, e);
+        }
+
+        private void DownloadAllMapsButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var messageBoxResult = MessageBox.Show(
+                "Warning: As I haven't implemented threading yet, the UI will freeze while all maps download. This will take a long time but you will be notified when it's finished. Continue anyway?",
+                "Continue?", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+            if (messageBoxResult == MessageBoxResult.No)
+                return;
+
+            foreach(var map in AppState.LethsMaps) 
+                map.Download();
+
+            LethamyrsMapsUserControl.RefreshChildren();
+
+            MessageBox.Show("All maps downloaded");
+        }
+
+        private void ClearCacheButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            foreach(var file in Directory.GetFiles(AppState.MapCacheDirectory)) 
+                File.Delete(file);
+        }
+
+        private void LaunchRocketLeagueButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (!Directory.Exists(AppState.RocketLeagueDirectory))
+                return;
+
+            var executable = Path.Combine(AppState.RocketLeagueDirectory, "Binaries", "RocketLeague.exe");
+            Process.Start(executable);
+        }
+
+        private void ShowExternalIpButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if(!IsConnectedToTheInternet())
+            {
+                MessageBox.Show("Not connected to the internet");
+                return;
+            }
+
+            var externalIp = GetPublicIP();
+            MessageBox.Show($"Your external IP address is: {externalIp}");
+        }
     }
 }

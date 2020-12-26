@@ -1,12 +1,11 @@
-﻿<Window x:Class="Rocket_League_Map_Loader.Setup"
+﻿<Window x:Class="RL_Map_Loader.Setup"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Rocket_League_Map_Loader"
         mc:Ignorable="d"
         Title="Rocket League Mod Manager - Setup" Height="450" Width="800" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"
-        Icon="Resources/xChaosModsLogo.ico">
+        Icon="Resources/xchaoslogo.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"></RowDefinition>

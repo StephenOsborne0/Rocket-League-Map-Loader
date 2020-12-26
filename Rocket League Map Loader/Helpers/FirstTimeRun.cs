@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Windows;
-using Rocket_League_Map_Loader.Models;
 
-namespace Rocket_League_Map_Loader.Helpers
+namespace RL_Map_Loader.Helpers
 {
     public class FirstTimeRun
     {
@@ -19,7 +19,7 @@ namespace Rocket_League_Map_Loader.Helpers
 
                 Properties.Settings.Default.IsFirstTimeRun = false;
                 Properties.Settings.Default.Save();
-                MessageBox.Show("Setup complete");
+                MessageBox.Show("Setup complete. Please wait whilst maps load...");
                 return true;
             }
             catch(Exception ex)
@@ -82,23 +82,28 @@ namespace Rocket_League_Map_Loader.Helpers
             if(!Directory.Exists(AppState.LocalModsDirectory)) 
                 return;
 
-            foreach (var upk in Directory.GetFiles(AppState.RLModsDirectory, "*.upk")) 
-                FileHelper.MoveFile(upk, AppState.LocalModsDirectory);
+            foreach(var upk in Directory.GetFiles(AppState.RLModsDirectory, "*.upk")
+                .Union(Directory.GetFiles(AppState.RLModsDirectory, "*.udk"))) 
+                BackupModFile(upk);
+        }
 
-            foreach (var udk in Directory.GetFiles(AppState.RLModsDirectory, "*.udk")) 
-                FileHelper.MoveFile(udk, AppState.LocalModsDirectory);
+        private static void BackupModFile(string fileName)
+        {
+            var dir = Path.Combine(AppState.LocalModsDirectory, Path.GetFileNameWithoutExtension(fileName));
+
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+
+            FileHelper.MoveFile(fileName, dir);
         }
 
         private static void InstallWorkshopTextures()
         {
-            var workshopTexturesStream = ResourceManager.LoadResource("Rocket_League_Map_Loader.Resources.Workshop-textures.zip");
-
+            var googleDriveId = "1te3LAFnmeKUemYHiIcmu-tnu_0uF4dSR";
+            var downloadedFile = GoogleDrive.Download(googleDriveId);
             var tempDir = Path.Combine(AppState.TempDirectory, "Workshop Textures");
 
-            if (!Directory.Exists(tempDir))
-                Directory.CreateDirectory(tempDir);
-
-            FileHelper.ExtractZipFile(workshopTexturesStream, null, tempDir);
+            FileHelper.ExtractZipFile(downloadedFile, null, tempDir);
 
             foreach(var file in Directory.GetFiles(tempDir))
                 FileHelper.MoveFile(file, AppState.CookedPcDirectory, true, AppState.LocalBackupDirectory);

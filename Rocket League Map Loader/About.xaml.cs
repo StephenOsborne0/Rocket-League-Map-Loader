@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Windows;
 
-namespace Rocket_League_Map_Loader
+namespace RL_Map_Loader
 {
     /// <summary>
     /// Interaction logic for About.xaml
@@ -18,6 +18,9 @@ namespace Rocket_League_Map_Loader
 
         private void YoutubeSocial_OnClick(object sender, RoutedEventArgs e) =>
             Process.Start("https://www.youtube.com/user/ChaosxShotz");
+
+        private void DiscordSocial_OnClick(object sender, RoutedEventArgs e) =>
+            Process.Start("https://discord.gg/tR5tqwHUTJ");
 
         private void KofiDonateButton_OnClick(object sender, RoutedEventArgs e) =>
             Process.Start("https://ko-fi.com/xchaos");

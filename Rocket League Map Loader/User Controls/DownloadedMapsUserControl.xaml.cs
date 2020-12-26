@@ -1,9 +1,8 @@
 ﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using Rocket_League_Map_Loader.Models;
 
-namespace Rocket_League_Map_Loader.User_Controls
+namespace RL_Map_Loader.User_Controls
 {
     /// <summary>
     /// Interaction logic for DownloadedMapsUserControl.xaml

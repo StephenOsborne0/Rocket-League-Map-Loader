@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Rocket_League_Map_Loader.Properties {
+namespace RL_Map_Loader.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Rocket_League_Map_Loader.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Rocket_League_Map_Loader.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RL_Map_Loader.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,16 @@ namespace Rocket_League_Map_Loader.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap discord_logo {
+            get {
+                object obj = ResourceManager.GetObject("discord_logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -121,21 +131,11 @@ namespace Rocket_League_Map_Loader.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] Workshop_textures {
-            get {
-                object obj = ResourceManager.GetObject("Workshop_textures", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon xChaosModsLogo {
+        internal static System.Drawing.Icon xChaosLogo {
             get {
-                object obj = ResourceManager.GetObject("xChaosModsLogo", resourceCulture);
+                object obj = ResourceManager.GetObject("xChaosLogo", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

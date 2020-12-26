@@ -7,19 +7,17 @@ using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using Rocket_League_Map_Loader.Helpers;
+using RL_Map_Loader.Helpers;
 using MessageBox = System.Windows.MessageBox;
 
-namespace Rocket_League_Map_Loader
+namespace RL_Map_Loader
 {
     /// <summary>
     /// Interaction logic for Setup.xaml
     /// </summary>
     public partial class Setup : Window
     {
-
         private string[] RocketLeagueDirectoryPaths =
         {
             @"C:\Program Files\Steam\steamapps\common\rocketleague",
@@ -206,8 +204,11 @@ namespace Rocket_League_Map_Loader
             Properties.Settings.Default.RocketLeagueInstallDirectory = RocketLeagueDirectoryTextbox.Text;
             Properties.Settings.Default.Save();
 
-            if(FirstTimeRun.Run())
+            var success = FirstTimeRun.Run();
+
+            if (success)
             {
+                App.LoadMaps();
                 new MainWindow().Show();
                 Close();
             }

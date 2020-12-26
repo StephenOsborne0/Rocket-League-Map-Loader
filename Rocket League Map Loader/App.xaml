@@ -1,7 +1,6 @@
-﻿<Application x:Class="Rocket_League_Map_Loader.App"
+﻿<Application x:Class="RL_Map_Loader.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Rocket_League_Map_Loader"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          

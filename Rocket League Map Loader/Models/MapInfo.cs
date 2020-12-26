@@ -1,4 +1,4 @@
-﻿namespace Rocket_League_Map_Loader.Models
+﻿namespace RL_Map_Loader.Models
 {
     public class MapInfo
     {

@@ -1,12 +1,11 @@
-﻿<UserControl x:Class="Rocket_League_Map_Loader.User_Controls.MapUserControl"
+﻿<UserControl x:Class="RL_Map_Loader.User_Controls.MapUserControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Rocket_League_Map_Loader.User_Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="800">
-    <Grid Background="Gray">
+    <Grid Background="#2a2829">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"></ColumnDefinition>
@@ -41,10 +40,10 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0" Content="View Info" Name="ViewInfoButton" Height="20" Margin="10 5 10 5" Click="ViewInfoButton_OnClick"></Button>
-                <Button Grid.Column="1" Content="Download" Name="DownloadButton" Height="20" Margin="10 5 10 5" Click="DownloadButton_OnClick"></Button>
-                <Button Grid.Column="1" Content="Install" Name="InstallButton" Height="20" Margin="10 5 10 5" Click="InstallButton_OnClick"></Button>
-                <Button Grid.Column="2" Content="Delete" Name="DeleteButton" Height="20" Margin="10 5 10 5" Click="DeleteButton_OnClick"></Button>
+                <Button Grid.Column="0" Content="View Info" Name="ViewInfoButton" Height="20" Margin="10 5 10 5" Click="ViewInfoButton_OnClick" Background="#2a2829" Foreground="White"></Button>
+                <Button Grid.Column="1" Content="Download" Name="DownloadButton" Height="20" Margin="10 5 10 5" Click="DownloadButton_OnClick" Background="#2a2829" Foreground="White"></Button>
+                <Button Grid.Column="1" Content="Load" Name="LoadButton" Height="20" Margin="10 5 10 5" Click="LoadButton_OnClick" Background="#2a2829" Foreground="White"></Button>
+                <!--<Button Grid.Column="2" Content="Delete" Name="DeleteButton" Height="20" Margin="10 5 10 5" Click="DeleteButton_OnClick" Background="#2a2829" Foreground="White"></Button>-->
             </Grid>
         </Grid>
     </Grid>

@@ -5,7 +5,7 @@ using System.Linq;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 
-namespace Rocket_League_Map_Loader.Helpers
+namespace RL_Map_Loader.Helpers
 {
     public class FileHelper
     {

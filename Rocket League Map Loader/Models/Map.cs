@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Net;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using Newtonsoft.Json;
-using Rocket_League_Map_Loader.Helpers;
+using RL_Map_Loader.Helpers;
+using static System.IO.FileMode;
 
-namespace Rocket_League_Map_Loader.Models
+namespace RL_Map_Loader.Models
 {
     public class Map
     {
@@ -32,14 +31,14 @@ namespace Rocket_League_Map_Loader.Models
 
         public string Webpage { get; set; }
 
-        public string Hash => MapFilePath != null ? HashHelper.GenerateHash(MapFilePath) : null;
+        public string Hash => null; //MapFilePath != null ? HashHelper.GenerateHash(MapFilePath) : null;
 
         public DateTime DatePublished { get; set; }
 
         [JsonIgnore]
         public BitmapImage Image { get; set; }
 
-        public string DownloadLink { get; set; }
+        public string GoogleDriveId { get; set; }
 
         public bool IsUpk => MapFilePath != null && Path.GetExtension(MapFilePath) == "*.upk";
 
@@ -71,20 +70,14 @@ namespace Rocket_League_Map_Loader.Models
             }
         }
 
-        public bool Download()
+        public void Download()
         {
-            var downloadLink = DownloadLink;
-
             try
             {
-                var wc = new WebClient();
-                var html = wc.DownloadString(downloadLink);
-
-                if (html.Contains("Google Drive - Virus scan warning"))
-                    TryGetConfirmedDownloadLink(html, ref downloadLink);
-
-                var downloadPath = Path.Combine(AppState.TempDirectory, $"{Name}.zip");
-                wc.DownloadFile(downloadLink, downloadPath);
+                var downloadPath = GoogleDrive.Download(GoogleDriveId, $"{Name}.zip");
+                
+                if (downloadPath == null)
+                    throw new InvalidOperationException($"Failed to download {Name}");
 
                 var mapDirectory = Path.Combine(AppState.LocalModsDirectory, $"{Name}");
 
@@ -94,41 +87,79 @@ namespace Rocket_League_Map_Loader.Models
                 FileHelper.ExtractZipFile(downloadPath, null, mapDirectory);
                 Directory = mapDirectory;
                 MapFilePath = FileHelper.FindMapFile(mapDirectory);
-
-                return true;
+                
+                Save();
+                OnDownloadCompleted(new DownloadCompletedEventArgs(this));
             }
             catch (Exception ex)
             {
-                //Process.Start(downloadLink);
                 MessageBox.Show(ex.Message);
-                return false;
             }
-        }
-
-        private void TryGetConfirmedDownloadLink(string html, ref string downloadLink)
-        {
-            var htmlDoc = new HtmlAgilityPack.HtmlDocument();
-            htmlDoc.LoadHtml(html);
-
-            var realDownloadLinkNode = htmlDoc.GetElementbyId("uc-download-link");
-            var href = realDownloadLinkNode?.GetAttributeValue("href", null);
-
-            if (href != null)
-                downloadLink = $"https://drive.google.com{href}";
         }
 
         public void Save()
         {
             var infoFilepath = FileHelper.FindMapInfo(Directory);
             var infoDirectory = FileHelper.GetFileDirectory(infoFilepath);
-            Save(infoDirectory);
+            Save(infoDirectory, "extra-info.json");
         }
 
-        public void Save(string directory)
+        public void Save(string directory, string filename)
         {
-            var outputFilePath = Path.Combine(directory, "extra-info.json");
+            var outputFilePath = Path.Combine(directory, filename);
             var json = JsonConvert.SerializeObject(this, Formatting.Indented);
             File.WriteAllText(outputFilePath, json);
+        }
+
+        public void SaveImageSource(string directory, string filename)
+        {
+            var outputFilePath = Path.Combine(directory, filename);
+
+            if (Image == null)
+                return;
+
+            using (var fileStream = new FileStream(outputFilePath, Create))
+            {
+                Image.StreamSource.CopyTo(fileStream);
+            }
+        }
+
+        public static Map Load(string mapInfoFile, string mapFilePath = null)
+        {
+            if (mapInfoFile != null)
+            {
+                var json = File.ReadAllText(mapInfoFile);
+                var map = JsonConvert.DeserializeObject<Map>(json);
+                //var image = mapInfoFile.Replace(".json", ".bin");
+
+                //if (File.Exists(image))
+                //{
+                //    var fs = new FileStream(image, Open);
+                //    map.Image = new BitmapImage();
+                //    map.Image.BeginInit();
+                //    map.Image.StreamSource = fs;
+                //    map.Image.EndInit();
+                //}
+
+                return map;
+            }
+            else
+            {
+                return new Map(mapFilePath);
+            }
+        }
+
+        public delegate void DownloadCompletedEventHandler(DownloadCompletedEventArgs e);
+
+        public static event DownloadCompletedEventHandler DownloadCompleted;
+
+        private static void OnDownloadCompleted(DownloadCompletedEventArgs e) => DownloadCompleted?.Invoke(e);
+
+        public class DownloadCompletedEventArgs : EventArgs
+        {
+            public Map Map;
+
+            public DownloadCompletedEventArgs(Map map) => Map = map;
         }
     }
 }
