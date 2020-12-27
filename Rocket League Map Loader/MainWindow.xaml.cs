@@ -69,7 +69,14 @@ namespace RL_Map_Loader
             if (!Directory.Exists(AppState.RocketLeagueDirectory))
                 return;
 
-            var executable = Path.Combine(AppState.RocketLeagueDirectory, "Binaries", "RocketLeague.exe");
+            var executable = Properties.Settings.Default.RocketLeagueExecutableDirectory;
+
+            if(!File.Exists(Properties.Settings.Default.RocketLeagueExecutableDirectory))
+            {
+                MessageBox.Show("Could not find Rocket League executable");
+                return;
+            }
+
             Process.Start(executable);
         }
 

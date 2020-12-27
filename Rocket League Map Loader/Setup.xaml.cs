@@ -49,13 +49,29 @@ namespace RL_Map_Loader
                 ? Path.Combine(BakkesModPluginDirectory, "plugins", "RocketPlugin.dll")
                 : null;
 
-        public bool RocketLeagueDirectoryIsValid
+        public bool RocketLeagueDirectoryIsValid => Directory.Exists(RocketLeagueDirectoryTextbox.Text) && RocketLeagueExecutableExists;
+
+        public bool RocketLeagueExecutableExists
         {
             get
             {
-                var rocketLeagueBinaryPath = Path.Combine(RocketLeagueDirectoryTextbox.Text, "Binaries", "RocketLeague.exe");
-                return Directory.Exists(RocketLeagueDirectoryTextbox.Text) && File.Exists(rocketLeagueBinaryPath);
+                SetRocketLeagueExecutablePath();
+                return File.Exists(Properties.Settings.Default.RocketLeagueExecutableDirectory);
             }
+        }
+
+        public void SetRocketLeagueExecutablePath()
+        {
+            var rocketLeagueBinaryPath1 = Path.Combine(RocketLeagueDirectoryTextbox.Text, "Binaries", "RocketLeague.exe");
+            var rocketLeagueBinaryPath2 = Path.Combine(RocketLeagueDirectoryTextbox.Text, "Binaries", "Win64", "RocketLeague.exe");
+            var rocketLeagueBinaryPath3 = Path.Combine(RocketLeagueDirectoryTextbox.Text, "Binaries", "Win32", "RocketLeague.exe");
+
+            if(File.Exists(rocketLeagueBinaryPath1))
+                Properties.Settings.Default.RocketLeagueExecutableDirectory = rocketLeagueBinaryPath1;
+            else if (File.Exists(rocketLeagueBinaryPath2))
+                Properties.Settings.Default.RocketLeagueExecutableDirectory = rocketLeagueBinaryPath2;
+            else if (File.Exists(rocketLeagueBinaryPath3))
+                Properties.Settings.Default.RocketLeagueExecutableDirectory = rocketLeagueBinaryPath3;
         }
 
         public bool RocketLeagueDirectoryIsSteam => RocketLeagueDirectoryTextbox.Text.Contains("steamapps");

@@ -8,5 +8,8 @@
     <Setting Name="RocketLeagueInstallDirectory" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\Program Files\Steam\steamapps\common\rocketleague</Value>
     </Setting>
+    <Setting Name="RocketLeagueExecutableDirectory" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Program Files\Steam\steamapps\common\rocketleague\Binaries\RocketLeague.exe</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

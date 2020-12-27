@@ -46,5 +46,17 @@ namespace RL_Map_Loader.Properties {
                 this["RocketLeagueInstallDirectory"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files\\Steam\\steamapps\\common\\rocketleague\\Binaries\\RocketLeague.exe")]
+        public string RocketLeagueExecutableDirectory {
+            get {
+                return ((string)(this["RocketLeagueExecutableDirectory"]));
+            }
+            set {
+                this["RocketLeagueExecutableDirectory"] = value;
+            }
+        }
     }
 }
