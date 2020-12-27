@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:userControls="clr-namespace:RL_Map_Loader.User_Controls"
         mc:Ignorable="d"
-        Title="Rocket League Mod Manager" Height="450" Width="800"
+        Title="RL Mod Manager" Height="450" Width="800"
         Icon="Resources/xChaosLogo.ico">
 
 

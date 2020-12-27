@@ -32,7 +32,7 @@ namespace RL_Map_Loader.Helpers
         public static string SetupBakkesMod()
         {
             var url = "https://download.bakkesmod.com/BakkesModSetup.zip";
-            var temp = Path.Combine(Path.GetTempPath(), "Rocket League Map Loader", "BakkesMod.zip");
+            var temp = Path.Combine(AppState.TempDirectory, "BakkesMod.zip");
             new WebClient().DownloadFile(url, temp);
 
             var tempDir = Path.Combine(AppState.TempDirectory, "BakkesMod");
@@ -57,6 +57,7 @@ namespace RL_Map_Loader.Helpers
 
             FileHelper.ExtractZipFile(temp, null, tempDir);
             FileHelper.CopyDirectory(tempDir, bakkesModPluginDirectory, true);
+            MessageBox.Show("Rocket plugin installed");
         }
 
         private static void CreateLocalModsDirectory()

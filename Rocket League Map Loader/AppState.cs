@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Media.Imaging;
-using Newtonsoft.Json;
 using RL_Map_Loader.Helpers;
 using RL_Map_Loader.MapGrabbers;
 using RL_Map_Loader.Models;

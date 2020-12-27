@@ -58,6 +58,8 @@ namespace RL_Map_Loader
             }
         }
 
+        public bool RocketLeagueDirectoryIsSteam => RocketLeagueDirectoryTextbox.Text.Contains("steamapps");
+
         public bool IsHamachiInstalled => File.Exists(HamachiFilePath);
 
         public bool IsBakkesModInstalled => File.Exists(BakkesModFilePath) && BakkesModPluginDirectory != null;
@@ -87,7 +89,13 @@ namespace RL_Map_Loader
             if (CompleteSetupButton != null)
                 CompleteSetupButton.IsEnabled = RocketLeagueDirectoryIsValid;
 
-            if(RocketLeagueDirectoryExistsIcon != null)
+            if (BakkesModButton != null)
+                BakkesModButton.IsEnabled = RocketLeagueDirectoryIsValid && RocketLeagueDirectoryIsSteam;
+
+            if (RocketPluginButton != null)
+                RocketPluginButton.IsEnabled = RocketLeagueDirectoryIsValid && RocketLeagueDirectoryIsSteam;
+
+            if (RocketLeagueDirectoryExistsIcon != null)
                 RocketLeagueDirectoryExistsIcon.Source = TrueOrFalseIcon(RocketLeagueDirectoryIsValid);
 
             UpdateHamachiInstalled();
@@ -149,7 +157,7 @@ namespace RL_Map_Loader
         private void HamachiButton_OnClick(object sender, RoutedEventArgs e)
         {
             var url = "https://secure.logmein.com/hamachi.msi";
-            var temp = Path.Combine(Path.GetTempPath(), "Rocket League Map Loader", "Hamachi installer.msi");
+            var temp = Path.Combine(AppState.TempDirectory, "Hamachi installer.msi");
             new WebClient().DownloadFile(url, temp);
 
             var process = new Process
