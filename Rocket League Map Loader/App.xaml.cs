@@ -95,7 +95,10 @@ namespace RL_Map_Loader
             { 
                 try
                 {
-                    Default[property.Name] = Default.GetPreviousVersion(property.Name);
+                    var previousValue = Default.GetPreviousVersion(property.Name);
+
+                    if (previousValue != null)
+                        Default[property.Name] = previousValue;
                 }
                 catch
                 {
