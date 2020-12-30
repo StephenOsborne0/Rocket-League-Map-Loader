@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using ICSharpCode.SharpZipLib.Core;
@@ -36,6 +37,9 @@ namespace RL_Map_Loader.Helpers
 
         public static void BackupFile(string sourceFilePath, string backupDirectory)
         {
+            if (!File.Exists(sourceFilePath))
+                return;
+            
             var filename = Path.GetFileName(sourceFilePath);
             var backupFileName = Path.Combine(backupDirectory, filename);
 
@@ -130,6 +134,8 @@ namespace RL_Map_Loader.Helpers
         }
 
         public static string GetFileDirectory(string filePath) => filePath.Substring(0, filePath.LastIndexOf("\\"));
+
+        public static string GetDirectoryName(string directoryPath) => directoryPath.Substring(directoryPath.LastIndexOf("\\"));
 
         public static string FindMapFile(string directory) =>
             FindAllMapFiles(directory).FirstOrDefault();

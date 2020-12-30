@@ -146,7 +146,7 @@ namespace RL_Map_Loader
 
             var foundDirectories = dirs.Where(x => x.Value).ToList();
 
-            if(!foundDirectories.Any())
+            if (!foundDirectories.Any())
             {
                 MessageBox.Show("Failed to find a rocket league directory");
                 return;
@@ -227,6 +227,9 @@ namespace RL_Map_Loader
         {
             Properties.Settings.Default.RocketLeagueInstallDirectory = RocketLeagueDirectoryTextbox.Text;
             Properties.Settings.Default.Save();
+
+            if (IsHamachiInstalled)
+                FirstTimeRun.UnprotectHamachi();
 
             var success = FirstTimeRun.Run();
 

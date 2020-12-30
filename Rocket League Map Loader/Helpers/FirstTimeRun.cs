@@ -3,6 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Windows;
+using System.Management.Automation;
+using System.Management.Automation.Runspaces;
 
 namespace RL_Map_Loader.Helpers
 {
@@ -12,6 +14,7 @@ namespace RL_Map_Loader.Helpers
         {
             try
             {
+                BackupUnderpassMap();
                 InstallWorkshopTextures();
                 CreateLocalModsDirectory();
                 CreateRocketLeagueModsDirectory();
@@ -27,6 +30,27 @@ namespace RL_Map_Loader.Helpers
                 MessageBox.Show($"Error during initial install: {ex.Message}");
                 return false;
             }
+        }
+
+        public static void UnprotectHamachi()
+        {
+            try
+            {
+                //Must be run as admin else it does fuck all
+                var script = "Set-NetFirewallProfile -Profile Public -DisabledInterfaceAliases @('Hamachi')";
+                PowerShell.Create().AddScript(script).Invoke();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+        public static void BackupUnderpassMap()
+        {
+            var path = Path.Combine(AppState.CookedPcDirectory, "Labs_Underpass_P.upk");
+            FileHelper.BackupFile(path, AppState.LocalBackupDirectory);
         }
 
         public static string SetupBakkesMod()

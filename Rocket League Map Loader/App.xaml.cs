@@ -87,7 +87,7 @@ namespace RL_Map_Loader
 
         private void RunMainApp()
         {
-            var isFirstTimeRun = Default.IsFirstTimeRun;
+            var isFirstTimeRun = true;//Default.IsFirstTimeRun;
 
             StartupUri = isFirstTimeRun
                 ? new Uri("Setup.xaml", UriKind.Relative)
