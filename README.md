@@ -3,12 +3,8 @@ A custom map manager program for rocket league.
 
 NOTE: Needs to run as administrator to be able to update Hamachi firewall settings.
 
-Known issues:
-- There is currently no multithreading implemented so downloads and other long processes will freeze the UI.
-- On auto updating, old settings may be lost and the setup may have to be run again.
-
 Future improvements:
-- Fix known issues
+- There is currently no multithreading implemented so downloads and other long processes will freeze the UI.
 - Add map filtering and searching
 - Community maps is currently relying on Lethamyr's website (Lethamyr.com). Currently there are no community maps uploaded but when there are, they will hopefully follow the same structure as Leths maps and not break my program when trying to load them haha.
 
@@ -23,10 +19,10 @@ To use:
 
 3) Open Hamachi and BakkesMod
 
-4) Once a map is loaded, go to "File > Force restart Rocket League" to restart the game.
+4) Once a map is loaded, go to "File" > "Force restart Rocket League" to restart the game.
 
 5) Set up a Hamachi network and get your friends to join. 
-- Run through Hamachi Diagnostics ("Help > Diagnostics") to check for any connection errors.
+- Run through Hamachi Diagnostics ("Help" > "Diagnostics") to check for any connection errors.
 - Also try pinging the other people in your network for a response.
 
 6) If Hamachi is working, go into Rocket League
