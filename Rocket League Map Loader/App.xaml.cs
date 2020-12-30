@@ -99,8 +99,8 @@ namespace RL_Map_Loader
 
         public static void LoadMaps()
         {
-            AppState.RefreshLethsMaps();
             AppState.RefreshDownloadedMaps();
+            AppState.RefreshLethsMaps();
             AppState.RefreshWorkshopMaps();
             AppState.RefreshCommunityMaps();
         }
