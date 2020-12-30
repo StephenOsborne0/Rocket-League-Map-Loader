@@ -1,17 +1,16 @@
 # Rocket-League-Map-Loader
 A custom map manager program for rocket league.
 
+NOTE: Needs to run as administrator to be able to update Hamachi firewall settings.
+
 Known issues:
 - There is currently no multithreading implemented so downloads and other long processes will freeze the UI.
-- Image caching is broken, so after the first run, images for maps may not display correctly.
 - On auto updating, old settings may be lost and the setup may have to be run again.
 
 Future improvements:
 - Fix known issues
 - Add map filtering and searching
-- Add option to start BakkesMod
 - Community maps is currently relying on Lethamyr's website (Lethamyr.com). Currently there are no community maps uploaded but when there are, they will hopefully follow the same structure as Leths maps and not break my program when trying to load them haha.
-- Add simple network diagnostics and fixes for Hamachi (i.e. auto add Hamachi to firewall etc)
 
 To use:
 1) Run through the initial setup.
