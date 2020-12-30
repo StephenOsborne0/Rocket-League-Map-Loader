@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Configuration;
 using System.Net;
 using System.Windows;
 using AutoUpdaterDotNET;
+using RL_Map_Loader.Properties;
 using static RL_Map_Loader.Properties.Settings;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
@@ -85,8 +87,28 @@ namespace RL_Map_Loader
             }
         }
 
+        private void TryLoadPreviousSettings()
+        {
+            Default.Upgrade();
+
+            foreach (SettingsProperty property in Default.Properties)
+            { 
+                try
+                {
+                    Default[property.Name] = Default.GetPreviousVersion(property.Name);
+                }
+                catch
+                {
+                    //Ignore - user may not have previous settings
+                }
+            }
+        }
+
         private void RunMainApp()
         {
+            TryLoadPreviousSettings();
+            Default.Save();
+
             var isFirstTimeRun = Default.IsFirstTimeRun;
 
             StartupUri = isFirstTimeRun
