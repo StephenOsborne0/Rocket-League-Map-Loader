@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using Newtonsoft.Json;
@@ -135,6 +136,11 @@ namespace RL_Map_Loader.Models
 
                 if(File.Exists(imageFilePath)) 
                     map.Image = new BitmapImage(new Uri(imageFilePath));
+
+                var previouslyDownloaded = AppState.DownloadedMaps.FirstOrDefault(x => x.Name == map.Name);
+
+                if(previouslyDownloaded != null)
+                    map.Directory = previouslyDownloaded.Directory;
 
                 return map;
             }
