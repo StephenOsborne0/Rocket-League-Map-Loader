@@ -36,13 +36,15 @@ namespace RL_Map_Loader.Helpers
         {
             try
             {
-                //Must be run as admin else it does fuck all
+                if (!AdminHelper.IsAdmin())
+                    throw new Exception("Unable to edit Hamachi firewall rules - need to run as admin");
+
                 var script = "Set-NetFirewallProfile -Profile Public -DisabledInterfaceAliases @('Hamachi')";
                 PowerShell.Create().AddScript(script).Invoke();
             }
             catch(Exception e)
             {
-                Console.WriteLine(e);
+                MessageBox.Show(e.Message);
                 throw;
             }
         }

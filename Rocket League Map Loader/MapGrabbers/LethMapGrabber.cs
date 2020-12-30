@@ -99,13 +99,11 @@ namespace RL_Map_Loader.MapGrabbers
             if (imageSrc != null)
             {
                 var wc = new WebClient();
-                var stream = wc.OpenRead(imageSrc);
+                var imageFilePath = Path.Combine(AppState.MapCacheDirectory, $"{map.Name}.jpg");
 
-                map.Image = new BitmapImage();
-                map.Image.BeginInit();
-                map.Image.StreamSource = stream;
-                //map.SaveImageSource(AppState.MapCacheDirectory, $"{map.Name}.bin");
-                map.Image.EndInit();
+                if (!File.Exists(imageFilePath))
+                    wc.DownloadFile(imageSrc, imageFilePath);
+                map.Image = new BitmapImage(new Uri(imageFilePath));
             }
 
             var mapHref = titleNode.GetSecondChild().GetAttributeValue("href", null);

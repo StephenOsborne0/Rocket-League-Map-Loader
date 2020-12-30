@@ -87,7 +87,7 @@ namespace RL_Map_Loader
 
         private void RunMainApp()
         {
-            var isFirstTimeRun = true;//Default.IsFirstTimeRun;
+            var isFirstTimeRun = Default.IsFirstTimeRun;
 
             StartupUri = isFirstTimeRun
                 ? new Uri("Setup.xaml", UriKind.Relative)
@@ -99,9 +99,9 @@ namespace RL_Map_Loader
 
         public static void LoadMaps()
         {
+            AppState.RefreshLethsMaps();
             AppState.RefreshDownloadedMaps();
             AppState.RefreshWorkshopMaps();
-            AppState.RefreshLethsMaps();
             AppState.RefreshCommunityMaps();
         }
     }

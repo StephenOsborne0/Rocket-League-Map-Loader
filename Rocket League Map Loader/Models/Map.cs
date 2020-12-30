@@ -130,16 +130,11 @@ namespace RL_Map_Loader.Models
             {
                 var json = File.ReadAllText(mapInfoFile);
                 var map = JsonConvert.DeserializeObject<Map>(json);
-                //var image = mapInfoFile.Replace(".json", ".bin");
 
-                //if (File.Exists(image))
-                //{
-                //    var fs = new FileStream(image, Open);
-                //    map.Image = new BitmapImage();
-                //    map.Image.BeginInit();
-                //    map.Image.StreamSource = fs;
-                //    map.Image.EndInit();
-                //}
+                var imageFilePath = Path.Combine(AppState.MapCacheDirectory, $"{map.Name}.jpg");
+
+                if(File.Exists(imageFilePath)) 
+                    map.Image = new BitmapImage(new Uri(imageFilePath));
 
                 return map;
             }

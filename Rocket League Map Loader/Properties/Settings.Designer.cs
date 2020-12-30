@@ -50,12 +50,48 @@ namespace RL_Map_Loader.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files\\Steam\\steamapps\\common\\rocketleague\\Binaries\\RocketLeague.exe")]
-        public string RocketLeagueExecutableDirectory {
+        public string RocketLeagueExecutableFilepath {
             get {
-                return ((string)(this["RocketLeagueExecutableDirectory"]));
+                return ((string)(this["RocketLeagueExecutableFilepath"]));
             }
             set {
-                this["RocketLeagueExecutableDirectory"] = value;
+                this["RocketLeagueExecutableFilepath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\SteamLibrary\\steamapps\\common\\rocketleague\\Binaries\\Win64\\bakkesmod")]
+        public string BakkesModDataDirectory {
+            get {
+                return ((string)(this["BakkesModDataDirectory"]));
+            }
+            set {
+                this["BakkesModDataDirectory"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files (x86)\\LogMeIn Hamachi")]
+        public string HamachiDirectory {
+            get {
+                return ((string)(this["HamachiDirectory"]));
+            }
+            set {
+                this["HamachiDirectory"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files\\BakkesMod\\BakkesMod.exe")]
+        public string BakkesModExecutableFilepath {
+            get {
+                return ((string)(this["BakkesModExecutableFilepath"]));
+            }
+            set {
+                this["BakkesModExecutableFilepath"] = value;
             }
         }
     }

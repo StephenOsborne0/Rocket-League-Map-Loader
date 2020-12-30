@@ -8,8 +8,17 @@
     <Setting Name="RocketLeagueInstallDirectory" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\Program Files\Steam\steamapps\common\rocketleague</Value>
     </Setting>
-    <Setting Name="RocketLeagueExecutableDirectory" Type="System.String" Scope="User">
+    <Setting Name="RocketLeagueExecutableFilepath" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\Program Files\Steam\steamapps\common\rocketleague\Binaries\RocketLeague.exe</Value>
+    </Setting>
+    <Setting Name="BakkesModDataDirectory" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\SteamLibrary\steamapps\common\rocketleague\Binaries\Win64\bakkesmod</Value>
+    </Setting>
+    <Setting Name="HamachiDirectory" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Program Files (x86)\LogMeIn Hamachi</Value>
+    </Setting>
+    <Setting Name="BakkesModExecutableFilepath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Program Files\BakkesMod\BakkesMod.exe</Value>
     </Setting>
   </Settings>
 </SettingsFile>

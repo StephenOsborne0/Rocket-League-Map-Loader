@@ -66,12 +66,9 @@ namespace RL_Map_Loader
 
         private void LaunchRocketLeagueButton_OnClick(object sender, RoutedEventArgs e)
         {
-            if (!Directory.Exists(AppState.RocketLeagueDirectory))
-                return;
+            var executable = AppState.RocketLeagueExecutableFilepath;
 
-            var executable = Properties.Settings.Default.RocketLeagueExecutableDirectory;
-
-            if(!File.Exists(Properties.Settings.Default.RocketLeagueExecutableDirectory))
+            if (!File.Exists(executable))
             {
                 MessageBox.Show("Could not find Rocket League executable");
                 return;
@@ -79,6 +76,20 @@ namespace RL_Map_Loader
 
             Process.Start(executable);
         }
+
+        private void LaunchBakkesModButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var executable = AppState.BakkesModExecutableFilepath;
+
+            if (!File.Exists(executable))
+            {
+                MessageBox.Show("Could not find BakkesMod executable");
+                return;
+            }
+
+            Process.Start(executable);
+        }
+
 
         private void ShowExternalIpButton_OnClick(object sender, RoutedEventArgs e)
         {

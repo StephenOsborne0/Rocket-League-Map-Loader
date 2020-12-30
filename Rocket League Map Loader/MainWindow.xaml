@@ -24,7 +24,8 @@
                     </MenuItem>-->
                     <!--<MenuItem Header="_Restore default files" Name="RestoreDefaultFilesButton"/>-->
                     <MenuItem Header="_Download all maps" Name="DownloadAllMapsButton" Click="DownloadAllMapsButton_OnClick"></MenuItem>
-                    <MenuItem Header="_Clear cache" Name="ClearCacheButton" Click="ClearCacheButton_OnClick"></MenuItem>
+                    <!--<MenuItem Header="_Clear cache" Name="ClearCacheButton" Click="ClearCacheButton_OnClick"></MenuItem>-->
+                    <MenuItem Header="_Launch BakkesMod" Name="LaunchBakkesModButton" Click="LaunchBakkesModButton_OnClick"></MenuItem>
                     <MenuItem Header="_Launch Rocket League" Name="LaunchRocketLeagueButton" Click="LaunchRocketLeagueButton_OnClick"></MenuItem>
                     <MenuItem Header="_Force restart Rocket League" Name="ForceRestartRocketLeagueButton" Click="ForceRestartRocketLeagueButton_OnClick"></MenuItem>
                     <Separator />

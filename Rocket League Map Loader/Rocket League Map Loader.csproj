@@ -134,6 +134,7 @@
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions\HtmlNodeExtensions.cs" />
+    <Compile Include="Helpers\AdminHelper.cs" />
     <Compile Include="Helpers\GoogleDrive.cs" />
     <Compile Include="Helpers\InternetConnectionHelper.cs" />
     <Compile Include="MapInfoForm.xaml.cs">
