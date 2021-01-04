@@ -94,5 +94,17 @@ namespace RL_Map_Loader.Properties {
                 this["BakkesModExecutableFilepath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files (x86)\\LogMeIn Hamachi\\hamachi-2-ui.exe")]
+        public string HamachiExecutableFilepath {
+            get {
+                return ((string)(this["HamachiExecutableFilepath"]));
+            }
+            set {
+                this["HamachiExecutableFilepath"] = value;
+            }
+        }
     }
 }

@@ -4,7 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;
+using System.Windows.Media;
+using RL_Map_Loader.User_Controls;
 using static RL_Map_Loader.Helpers.InternetConnectionHelper;
+using HorizontalAlignment = System.Windows.HorizontalAlignment;
+using Label = System.Windows.Controls.Label;
+using MessageBox = System.Windows.MessageBox;
 using Path = System.IO.Path;
 
 namespace RL_Map_Loader
@@ -14,7 +21,47 @@ namespace RL_Map_Loader
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow() => InitializeComponent();
+        private MapsListUserControl LethamyrsMapsUserControl { get; set; }
+
+        private MapsListUserControl DownloadedMapsUserControl { get; set; }
+
+        private MapsListUserControl WorkshopMapsUserControl { get; set; }
+
+        private MapsListUserControl CommunityMapsUserControl { get; set; }
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            Loaded += WindowLoaded;
+        }
+
+        private void WindowLoaded(object sender, RoutedEventArgs e)
+        {
+            LethamyrsMapsUserControl = new MapsListUserControl(AppState.LethsMaps);
+            DownloadedMapsUserControl = new MapsListUserControl(AppState.DownloadedMaps);
+            WorkshopMapsUserControl = new MapsListUserControl(AppState.WorkshopMaps);
+            CommunityMapsUserControl = new MapsListUserControl(AppState.CommunityMaps);
+
+            var comingSoonLabel = new Label
+            {
+                Content = "Coming soon",
+                Foreground = Brushes.White,
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+
+            var communityMapsTempGrid = new Grid
+            {
+                Background = Brushes.Black
+            };
+
+            communityMapsTempGrid.Children.Add(comingSoonLabel);
+
+            MapsTabControl.Items.Add(new TabItem { Header = "Lethamyr's maps", Content = LethamyrsMapsUserControl });
+            MapsTabControl.Items.Add(new TabItem { Header = "Downloaded maps", Content = DownloadedMapsUserControl });
+            MapsTabControl.Items.Add(new TabItem { Header = "Workshop maps", Content = WorkshopMapsUserControl });
+            MapsTabControl.Items.Add(new TabItem { Header = "Community maps", Content = communityMapsTempGrid });
+        }
 
         private void ExitButton_OnClick(object sender, RoutedEventArgs e) => Environment.Exit(0);
 
@@ -54,7 +101,6 @@ namespace RL_Map_Loader
                 map.Download();
 
             LethamyrsMapsUserControl.RefreshChildren();
-
             MessageBox.Show("All maps downloaded");
         }
 
@@ -90,7 +136,6 @@ namespace RL_Map_Loader
             Process.Start(executable);
         }
 
-
         private void ShowExternalIpButton_OnClick(object sender, RoutedEventArgs e)
         {
             if(!IsConnectedToTheInternet())
@@ -102,5 +147,96 @@ namespace RL_Map_Loader
             var externalIp = GetPublicIP();
             MessageBox.Show($"Your external IP address is: {externalIp}");
         }
+
+        private void OpenSteamWorkshopDownloaderButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://steamworkshopdownloader.io/");
+        }
+
+        private void LaunchHamachiButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if(!File.Exists(AppState.HamachiExecutableFilepath))
+            {
+                MessageBox.Show("Could not find Hamachi executable");
+                return;
+            }
+
+            Process.Start(AppState.HamachiExecutableFilepath);
+        }
+
+        private void ImportUnityPackagesButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                DefaultExt = "UPK Files|*.upk|UDK Files|*.udk",
+                Multiselect = true
+            };
+
+            var dr = openFileDialog.ShowDialog();
+
+            if (dr != System.Windows.Forms.DialogResult.OK)
+                return;
+
+            ImportFiles(openFileDialog.FileNames);
+        }
+
+        private void ImportFiles(string[] files)
+        {
+            if (files == null || !files.Any())
+                return;
+
+            var dirName = Path.GetFileNameWithoutExtension(files.First());
+            var dir = Path.Combine(AppState.LocalModsDirectory, dirName);
+
+            if(!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+
+            foreach(var file in files)
+            {
+                var filename = Path.GetFileName(file);
+                File.Copy(file, Path.Combine(dir, filename));
+            }
+
+            RefreshDownloadedMaps();
+        }
+
+        private void RefreshDownloadedMaps()
+        {
+            AppState.RefreshDownloadedMaps();
+            DownloadedMapsUserControl.RefreshListedMaps(AppState.DownloadedMaps);
+        }
+
+        private void RefreshLethamyrsMaps()
+        {
+            AppState.RefreshLethsMaps();
+            LethamyrsMapsUserControl.RefreshListedMaps(AppState.LethsMaps);
+        }
+
+        private void RefreshWorkshopMaps()
+        {
+            AppState.RefreshWorkshopMaps();
+            WorkshopMapsUserControl.RefreshListedMaps(AppState.WorkshopMaps);
+        }
+
+        private void RefreshCommunityMaps()
+        {
+            AppState.RefreshCommunityMaps();
+            CommunityMapsUserControl.RefreshListedMaps(AppState.CommunityMaps);
+        }
+
+        private void RefreshDownloadedMapsButton_OnClick(object sender, RoutedEventArgs e) => RefreshDownloadedMaps();
+
+        private void RefreshLethamyrsMapsButton_OnClick(object sender, RoutedEventArgs e) => RefreshLethamyrsMaps();
+
+        private void RefreshWorkshopMapsButton_OnClick(object sender, RoutedEventArgs e) => RefreshWorkshopMaps();
+
+        private void RefreshCommunityMapsButton_OnClick(object sender, RoutedEventArgs e) => RefreshCommunityMaps();
+
+        private void ViewInstructionsButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://github.com/xchaosmods/Rocket-League-Map-Loader");
+        }
+
+        private void ShowSettings_OnClick(object sender, RoutedEventArgs e) => new Settings().ShowDialog();
     }
 }

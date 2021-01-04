@@ -19,17 +19,26 @@
             <Menu DockPanel.Dock="Top">
 
                 <MenuItem Header="_File">
-                    <!--<MenuItem Header="_Import">
-                        <MenuItem Header="_Unity Package" Name="ImportUnityPackageButton"></MenuItem>
-                    </MenuItem>-->
+                    <MenuItem Header="_Import">
+                        <MenuItem Header="_Unity Package" Name="ImportUnityPackagesButton" Click="ImportUnityPackagesButton_OnClick"></MenuItem>
+                    </MenuItem>
                     <!--<MenuItem Header="_Restore default files" Name="RestoreDefaultFilesButton"/>-->
-                    <MenuItem Header="_Download all maps" Name="DownloadAllMapsButton" Click="DownloadAllMapsButton_OnClick"></MenuItem>
                     <!--<MenuItem Header="_Clear cache" Name="ClearCacheButton" Click="ClearCacheButton_OnClick"></MenuItem>-->
+                    <MenuItem Header="_Launch Hamachi" Name="LaunchHamachiButton" Click="LaunchHamachiButton_OnClick"></MenuItem>
                     <MenuItem Header="_Launch BakkesMod" Name="LaunchBakkesModButton" Click="LaunchBakkesModButton_OnClick"></MenuItem>
                     <MenuItem Header="_Launch Rocket League" Name="LaunchRocketLeagueButton" Click="LaunchRocketLeagueButton_OnClick"></MenuItem>
                     <MenuItem Header="_Force restart Rocket League" Name="ForceRestartRocketLeagueButton" Click="ForceRestartRocketLeagueButton_OnClick"></MenuItem>
                     <Separator />
                     <MenuItem Header="_Exit" Name="ExitButton" Click="ExitButton_OnClick"/>
+                </MenuItem>
+
+                <MenuItem Header="_Maps">
+                    <MenuItem Header="_Download all Lethamyr's maps" Name="DownloadAllMapsButton" Click="DownloadAllMapsButton_OnClick"></MenuItem>
+                    <MenuItem Header="_Open steam workshop downloader" Name="OpenSteamWorkshopDownloaderButton" Click="OpenSteamWorkshopDownloaderButton_OnClick"></MenuItem>
+                    <MenuItem Header="_Refresh downloaded maps" Name="RefreshDownloadedMapsButton" Click="RefreshDownloadedMapsButton_OnClick"></MenuItem>
+                    <MenuItem Header="_Refresh Lethamyr's maps" Name="RefreshLethamyrsMapsButton" Click="RefreshLethamyrsMapsButton_OnClick"></MenuItem>
+                    <MenuItem Header="_Refresh workshop maps" Name="RefreshWorkshopMapsButton" Click="RefreshWorkshopMapsButton_OnClick"></MenuItem>
+                    <MenuItem Header="_Refresh community maps" Name="RefreshCommunityMapsButton" Click="RefreshCommunityMapsButton_OnClick"></MenuItem>
                 </MenuItem>
 
                 <MenuItem Header="_View">
@@ -40,7 +49,10 @@
 
                 <MenuItem Header="_About" Name="AboutButton" Click="AboutButton_OnClick"></MenuItem>
 
-                <!--<MenuItem Header="_Help"></MenuItem>-->
+                <MenuItem Header="_Help">
+                    <MenuItem Header="_View instructions" Name="ViewInstructionsButton" Click="ViewInstructionsButton_OnClick"></MenuItem>
+                    <MenuItem Header="_Show settings" Name ="ShowSettings" Click="ShowSettings_OnClick"/>
+                </MenuItem>
 
             </Menu>
             <TextBox AcceptsReturn="True" />
@@ -51,22 +63,7 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <TabControl Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
-                <TabItem Header="_Lethamyr's maps">
-                    <userControls:LethamyrsMapsUserControl x:Name="LethamyrsMapsUserControl"></userControls:LethamyrsMapsUserControl>
-                </TabItem>
-                <TabItem Header="_Downloaded maps">
-                    <userControls:DownloadedMapsUserControl></userControls:DownloadedMapsUserControl>
-                </TabItem>
-                <TabItem Header="_Workshop maps">
-                    <userControls:WorkshopMapsUserControl></userControls:WorkshopMapsUserControl>
-                </TabItem>
-                <TabItem Header="_Community maps">
-                    <Grid Background="Black">
-                        <Label Content="Coming soon" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
-                    </Grid>
-                    <!--<userControls:CommunityMapsUserControl></userControls:CommunityMapsUserControl>-->
-                </TabItem>
+            <TabControl Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Name="MapsTabControl">
             </TabControl>
         </Grid>
     </Grid>

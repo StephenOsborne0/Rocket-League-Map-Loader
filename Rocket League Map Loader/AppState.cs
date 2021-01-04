@@ -9,17 +9,76 @@ namespace RL_Map_Loader
 {
     public static class AppState
     {
+        internal static Properties.Settings Settings { get; set; } = new Properties.Settings();
+
+        public static string RocketLeagueInstallDirectory
+        {
+            get => Settings.RocketLeagueInstallDirectory ?? Properties.Settings.Default.RocketLeagueInstallDirectory;
+            set
+            {
+                Settings.RocketLeagueInstallDirectory = value;
+                Settings.Save();
+            }
+        }
+
+        public static string BakkesModDataDirectory
+        {
+            get => Settings.BakkesModDataDirectory ?? Properties.Settings.Default.BakkesModDataDirectory;
+            set
+            {
+                Settings.BakkesModDataDirectory = value;
+                Settings.Save();
+            }
+        }
+
+        public static string RocketLeagueExecutableFilepath
+        {
+            get => Settings.RocketLeagueExecutableFilepath ?? Properties.Settings.Default.RocketLeagueExecutableFilepath;
+            set
+            {
+                Settings.RocketLeagueExecutableFilepath = value;
+                Settings.Save();
+            }
+        }
+
+        public static string BakkesModExecutableFilepath
+        {
+            get => Settings.BakkesModExecutableFilepath ?? Properties.Settings.Default.BakkesModExecutableFilepath;
+            set
+            {
+                Settings.BakkesModExecutableFilepath = value;
+                Settings.Save();
+            }
+        }
+        public static string HamachiDirectory
+        {
+            get => Settings.HamachiDirectory ?? Properties.Settings.Default.HamachiDirectory;
+            set
+            {
+                Settings.HamachiDirectory = value;
+                Settings.Save();
+            }
+        }
+
+        public static string HamachiExecutableFilepath
+        {
+            get => Settings.HamachiExecutableFilepath ?? Properties.Settings.Default.HamachiExecutableFilepath;
+            set
+            {
+                Settings.HamachiExecutableFilepath = value;
+                Settings.Save();
+            }
+        }
+
         public static readonly string TempDirectory = Path.Combine(Path.GetTempPath(), "RL Map Loader");
-        public static readonly string RocketLeagueExecutableFilepath = Properties.Settings.Default.RocketLeagueExecutableFilepath;
-        public static readonly string RocketLeagueDirectory = Properties.Settings.Default.RocketLeagueInstallDirectory;
-        public static readonly string CookedPcDirectory = Path.Combine(RocketLeagueDirectory, "TAGame", "CookedPCConsole");
+        public static readonly string CookedPcDirectory = Path.Combine(RocketLeagueInstallDirectory, "TAGame", "CookedPCConsole");
         public static readonly string LocalModsDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mods");
         public static readonly string LocalBackupDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup");
         public static readonly string RLModsDirectory = Path.Combine(CookedPcDirectory, "Mods");
-        public static readonly string SteamWorkshopDirectory = RocketLeagueDirectory.Contains("steamapps") ? GetSteamWorkshopPath() : null;
+        public static readonly string SteamWorkshopDirectory = RocketLeagueInstallDirectory.Contains("steamapps") ? GetSteamWorkshopPath() : null;
         public static readonly string MapCacheDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MapCache");
-        public static readonly string BakkesModDataDirectory = Properties.Settings.Default.BakkesModDataDirectory;
-        public static readonly string BakkesModExecutableFilepath = Properties.Settings.Default.BakkesModExecutableFilepath;
+
+        public static bool RocketLeagueDirectoryIsSteam => RocketLeagueInstallDirectory.Contains("steamapps");
 
         public static List<Map> DownloadedMaps = new List<Map>();
         public static List<Map> LethsMaps = new List<Map>();
@@ -67,6 +126,9 @@ namespace RL_Map_Loader
         {
             var workshopMaps = new List<Map>();
 
+            if(!Directory.Exists(SteamWorkshopDirectory))
+                return;
+
             foreach(var directory in Directory.GetDirectories(SteamWorkshopDirectory))
             {
                 var mapFile = FileHelper.FindMapFile(directory);
@@ -91,6 +153,10 @@ namespace RL_Map_Loader
             catch(Exception ex) { return null; }
         }
 
-        public static string GetSteamWorkshopPath() => Path.Combine(RocketLeagueDirectory, "..", "..", "workshop", "content", "252950");
+        public static string GetSteamWorkshopPath()
+        {
+            var path = Path.Combine(RocketLeagueInstallDirectory, "..", "..", "workshop", "content", "252950");
+            return File.Exists(path) ? path : null;
+        }
     }
 }

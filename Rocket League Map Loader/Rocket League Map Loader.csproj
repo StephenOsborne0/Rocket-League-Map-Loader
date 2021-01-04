@@ -138,6 +138,7 @@
     <Compile Include="Helpers\AdminHelper.cs" />
     <Compile Include="Helpers\GoogleDrive.cs" />
     <Compile Include="Helpers\InternetConnectionHelper.cs" />
+    <Compile Include="Helpers\RegistryHelper.cs" />
     <Compile Include="MapInfoForm.xaml.cs">
       <DependentUpon>MapInfoForm.xaml</DependentUpon>
     </Compile>
@@ -153,24 +154,18 @@
     <Compile Include="MapGrabbers\LethMapGrabber.cs" />
     <Compile Include="Models\MapInfo.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Setup.xaml.cs">
       <DependentUpon>Setup.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\FileHelper.cs" />
-    <Compile Include="User Controls\CommunityMapsUserControl.xaml.cs">
-      <DependentUpon>CommunityMapsUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="User Controls\DownloadedMapsUserControl.xaml.cs">
-      <DependentUpon>DownloadedMapsUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="User Controls\LethamyrsMapsUserControl.xaml.cs">
-      <DependentUpon>LethamyrsMapsUserControl.xaml</DependentUpon>
+    <Compile Include="User Controls\MapsListUserControl.xaml.cs">
+      <DependentUpon>MapsListUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="User Controls\MapUserControl.xaml.cs">
       <DependentUpon>MapUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="User Controls\WorkshopMapsUserControl.xaml.cs">
-      <DependentUpon>WorkshopMapsUserControl.xaml</DependentUpon>
     </Compile>
     <Page Include="About.xaml">
       <SubType>Designer</SubType>
@@ -193,27 +188,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Setup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="User Controls\CommunityMapsUserControl.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="User Controls\MapsListUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="User Controls\DownloadedMapsUserControl.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="User Controls\LethamyrsMapsUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="User Controls\MapUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="User Controls\WorkshopMapsUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

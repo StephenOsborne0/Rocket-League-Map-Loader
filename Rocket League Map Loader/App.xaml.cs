@@ -3,7 +3,6 @@ using System.Configuration;
 using System.Net;
 using System.Windows;
 using AutoUpdaterDotNET;
-using RL_Map_Loader.Properties;
 using static RL_Map_Loader.Properties.Settings;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
@@ -48,7 +47,7 @@ namespace RL_Map_Loader
                             MessageBox.Show(
                                 $@"There is new version {args.CurrentVersion} available. You are using version {
                                         args.InstalledVersion
-                                    }. Do you want to update the application now?", @"Update Available",
+                                    }. Do you want to update the application now?", @"Update available",
                                 MessageBoxButton.YesNo,
                                 MessageBoxImage.Information);
                     }
@@ -76,7 +75,7 @@ namespace RL_Map_Loader
                 case WebException _:
                     MessageBox.Show(
                         @"There is a problem reaching update server. Please check your internet connection and try again later.",
-                        @"Update Check Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                        @"Update check failed", MessageBoxButton.OK, MessageBoxImage.Error);
                     break;
 
                 default:
@@ -89,16 +88,16 @@ namespace RL_Map_Loader
 
         private void TryLoadPreviousSettings()
         {
-            Default.Upgrade();
+            AppState.Settings.Upgrade();
 
-            foreach (SettingsProperty property in Default.Properties)
-            { 
+            foreach (SettingsProperty property in AppState.Settings.Properties)
+            {
                 try
                 {
                     var previousValue = Default.GetPreviousVersion(property.Name);
 
                     if (previousValue != null)
-                        Default[property.Name] = previousValue;
+                        AppState.Settings[property.Name] = previousValue;
                 }
                 catch
                 {
@@ -110,7 +109,7 @@ namespace RL_Map_Loader
         private void RunMainApp()
         {
             TryLoadPreviousSettings();
-            Default.Save();
+            AppState.Settings.Save();
 
             var isFirstTimeRun = Default.IsFirstTimeRun;
 
@@ -126,7 +125,10 @@ namespace RL_Map_Loader
         {
             AppState.RefreshDownloadedMaps();
             AppState.RefreshLethsMaps();
-            AppState.RefreshWorkshopMaps();
+
+            if (AppState.RocketLeagueDirectoryIsSteam)
+                AppState.RefreshWorkshopMaps();
+
             AppState.RefreshCommunityMaps();
         }
     }

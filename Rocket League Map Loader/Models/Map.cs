@@ -144,10 +144,8 @@ namespace RL_Map_Loader.Models
 
                 return map;
             }
-            else
-            {
-                return new Map(mapFilePath);
-            }
+
+            return new Map(mapFilePath);
         }
 
         public delegate void DownloadCompletedEventHandler(DownloadCompletedEventArgs e);

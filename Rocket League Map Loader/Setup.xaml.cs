@@ -18,19 +18,13 @@ namespace RL_Map_Loader
     /// </summary>
     public partial class Setup : Window
     {
-        private readonly string[] RocketLeagueDirectoryPaths =
+        public Setup()
         {
-            @"C:\Program Files\Steam\steamapps\common\rocketleague",
-            @"C:\Program Files (x86)\Steam\steamapps\common\rocketleague",
-            @"C:\Program Files\Epic Games\rocketleague",
-            @"C:\Program Files (x86)\Epic Games\rocketleague",
-            @"E:\SteamLibrary\steamapps\common\rocketleague"
-        };
+            InitializeComponent();
+            Loaded += WindowLoaded;
+        }
 
-        private readonly string HamachiFilePath = @"C:\Program Files (x86)\LogMeIn Hamachi\hamachi-2-ui.exe";
-        private readonly string BakkesModFilePath = @"C:\Program Files\BakkesMod\BakkesMod.exe";
-
-        private string BakkesModPluginDirectory
+        private string BakkesModDataDirectory
         {
             get
             {
@@ -43,14 +37,13 @@ namespace RL_Map_Loader
                         ? bakkesModPathWin64 : null;
 
                 SetBakkesModDataDirectoryPath(bakkesModDirectory);
-
                 return bakkesModDirectory;
             }
         }
 
         private string RocketPluginFilePath =>
-            BakkesModPluginDirectory != null
-                ? Path.Combine(BakkesModPluginDirectory, "plugins", "RocketPlugin.dll")
+            BakkesModDataDirectory != null
+                ? Path.Combine(BakkesModDataDirectory, "plugins", "RocketPlugin.dll")
                 : null;
 
         public bool RocketLeagueDirectoryIsValid => Directory.Exists(RocketLeagueDirectoryTextbox.Text) && RocketLeagueExecutableExists;
@@ -60,14 +53,11 @@ namespace RL_Map_Loader
             get
             {
                 SetRocketLeagueExecutablePath();
-                return File.Exists(Properties.Settings.Default.RocketLeagueExecutableFilepath);
+                return File.Exists(AppState.RocketLeagueExecutableFilepath);
             }
         }
 
-        public void SetBakkesModDataDirectoryPath(string bakkesModDirectory)
-        {
-            Properties.Settings.Default.BakkesModDataDirectory = bakkesModDirectory;
-        }
+        public void SetBakkesModDataDirectoryPath(string bakkesModDirectory) => AppState.BakkesModDataDirectory = bakkesModDirectory;
 
         public void SetRocketLeagueExecutablePath()
         {
@@ -76,28 +66,31 @@ namespace RL_Map_Loader
             var rocketLeagueBinaryPath3 = Path.Combine(RocketLeagueDirectoryTextbox.Text, "Binaries", "Win32", "RocketLeague.exe");
 
             if(File.Exists(rocketLeagueBinaryPath1))
-                Properties.Settings.Default.RocketLeagueExecutableFilepath = rocketLeagueBinaryPath1;
+                AppState.RocketLeagueExecutableFilepath = rocketLeagueBinaryPath1;
             else if (File.Exists(rocketLeagueBinaryPath2))
-                Properties.Settings.Default.RocketLeagueExecutableFilepath = rocketLeagueBinaryPath2;
+                AppState.RocketLeagueExecutableFilepath = rocketLeagueBinaryPath2;
             else if (File.Exists(rocketLeagueBinaryPath3))
-                Properties.Settings.Default.RocketLeagueExecutableFilepath = rocketLeagueBinaryPath3;
+                AppState.RocketLeagueExecutableFilepath = rocketLeagueBinaryPath3;
         }
 
-        public bool RocketLeagueDirectoryIsSteam => RocketLeagueDirectoryTextbox.Text.Contains("steamapps");
+        public bool IsHamachiInstalled => RegistryHelper.IsExecutableInstalled("hamachi-2-ui.exe");
 
-        public bool IsHamachiInstalled => File.Exists(HamachiFilePath);
-
-        public bool IsBakkesModInstalled => File.Exists(BakkesModFilePath) && BakkesModPluginDirectory != null;
+        public bool IsBakkesModInstalled => RegistryHelper.IsExecutableInstalled("BakkesMod.exe") && BakkesModDataDirectory != null;
 
         public bool IsRocketPluginInstalled => File.Exists(RocketPluginFilePath);
 
-        public Setup()
+        public void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            InitializeComponent();
-            Loaded += WindowLoaded;
+            RocketLeagueDirectoryTextbox.Text = TryFindRocketLeagueDirectory();
+            UpdateRocketLeagueDirectoryExists();
         }
 
-        public void WindowLoaded(object sender, RoutedEventArgs e) => UpdateRocketLeagueDirectoryExists();
+        public string TryFindRocketLeagueDirectory()
+        {
+            var path = RegistryHelper.FindExecutableFilePath("RocketLeague.exe");
+            var index = path?.IndexOf("rocketleague", StringComparison.Ordinal) + 12;
+            return path?.Substring(0, (int)index);
+        }
 
         private void HamachiInstalledCallback(object sender, EventArgs e) => UpdateHamachiInstalled();
 
@@ -115,10 +108,10 @@ namespace RL_Map_Loader
                 CompleteSetupButton.IsEnabled = RocketLeagueDirectoryIsValid;
 
             if (BakkesModButton != null)
-                BakkesModButton.IsEnabled = RocketLeagueDirectoryIsValid && RocketLeagueDirectoryIsSteam;
+                BakkesModButton.IsEnabled = RocketLeagueDirectoryIsValid;
 
             if (RocketPluginButton != null)
-                RocketPluginButton.IsEnabled = RocketLeagueDirectoryIsValid && RocketLeagueDirectoryIsSteam;
+                RocketPluginButton.IsEnabled = RocketLeagueDirectoryIsValid;
 
             if (RocketLeagueDirectoryExistsIcon != null)
                 RocketLeagueDirectoryExistsIcon.Source = TrueOrFalseIcon(RocketLeagueDirectoryIsValid);
@@ -133,7 +126,13 @@ namespace RL_Map_Loader
             if (HamachiDirectoryExistsIcon != null)
                 HamachiDirectoryExistsIcon.Source = TrueOrFalseIcon(IsHamachiInstalled);
 
-            Properties.Settings.Default.HamachiDirectory = HamachiFilePath.Substring(0, HamachiFilePath.LastIndexOf("\\"));
+            var path = RegistryHelper.FindExecutableFilePath("hamachi-2-ui.exe");
+
+            if(path == null) 
+                return;
+
+            AppState.HamachiDirectory = path.Substring(0, path.IndexOf("hamachi-2-ui.exe", StringComparison.Ordinal));
+            AppState.HamachiExecutableFilepath = path;
         }
 
         public void UpdateBakkesModInstalled()
@@ -141,7 +140,10 @@ namespace RL_Map_Loader
             if (BakkesModDirectoryExistsIcon != null)
                 BakkesModDirectoryExistsIcon.Source = TrueOrFalseIcon(IsBakkesModInstalled);
 
-            Properties.Settings.Default.BakkesModExecutableFilepath = BakkesModFilePath;
+            var path = RegistryHelper.FindExecutableFilePath("BakkesMod.exe");
+
+            if (path != null)
+                AppState.BakkesModExecutableFilepath = path;
         }
 
         public void UpdateRocketPluginInstalled()
@@ -152,27 +154,15 @@ namespace RL_Map_Loader
 
         private void AutoFindButton_OnClick(object sender, RoutedEventArgs e)
         {
-            var dirs = new Dictionary<string, bool>();
+            var path = RegistryHelper.FindExecutableFilePath("RocketLeague.exe");
 
-            foreach(var dir in RocketLeagueDirectoryPaths) 
-                dirs.Add(dir, Directory.Exists(dir));
-
-            var foundDirectories = dirs.Where(x => x.Value).ToList();
-
-            if (!foundDirectories.Any())
+            if (path == null)
             {
-                MessageBox.Show("Failed to find a rocket league directory");
+                MessageBox.Show("Failed to find Rocket League directory");
                 return;
             }
 
-            if(foundDirectories.Count() > 1)
-            {
-                var locations = string.Join("\r\n", foundDirectories.Select(x => x.Key));
-                MessageBox.Show($"Found {foundDirectories.Count} rocket league directories at the following locations. Please manually input the correct one:\r\n{locations}");
-                return;
-            }
-
-            RocketLeagueDirectoryTextbox.Text = foundDirectories.First().Key;
+            RocketLeagueDirectoryTextbox.Text = TryFindRocketLeagueDirectory();
         }
 
         private void BrowseButton_OnClick(object sender, RoutedEventArgs e)
@@ -225,21 +215,20 @@ namespace RL_Map_Loader
                 return;
             }
 
-            if (BakkesModPluginDirectory == null)
+            if (BakkesModDataDirectory == null)
             {
                 MessageBox.Show(
                     "Failed to find BakkesMod install directory. Please make sure that you install BakkesMod before Rocket Plugin");
                 return;
             }
 
-            FirstTimeRun.InstallRocketPlugin(BakkesModPluginDirectory);
+            FirstTimeRun.InstallRocketPlugin(BakkesModDataDirectory);
             RocketPluginInstalledCallback(this, new EventArgs());
         }
 
         private void CompleteSetupButton_OnClick(object sender, RoutedEventArgs e)
         {
-            Properties.Settings.Default.RocketLeagueInstallDirectory = RocketLeagueDirectoryTextbox.Text;
-            Properties.Settings.Default.Save();
+            AppState.RocketLeagueInstallDirectory = RocketLeagueDirectoryTextbox.Text;
 
             if (IsHamachiInstalled)
                 FirstTimeRun.UnprotectHamachi();

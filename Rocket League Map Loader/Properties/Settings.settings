@@ -20,5 +20,8 @@
     <Setting Name="BakkesModExecutableFilepath" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\Program Files\BakkesMod\BakkesMod.exe</Value>
     </Setting>
+    <Setting Name="HamachiExecutableFilepath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Program Files (x86)\LogMeIn Hamachi\hamachi-2-ui.exe</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

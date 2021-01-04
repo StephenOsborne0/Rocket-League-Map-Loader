@@ -61,11 +61,11 @@
             <TextBlock Grid.Column="1" Grid.Row="1" Text="Required for multiplayer mods" TextWrapping="WrapWithOverflow" TextAlignment="Center" Foreground="White"></TextBlock>
             <Image Grid.Column="2" Grid.Row="0" Name="HamachiDirectoryExistsIcon" Source="Resources/error.ico" Height="25" Width="25" Margin="-80 10 10 10"></Image>
 
-            <Button Grid.Column="3" Grid.Row="0" Height="30" Margin="20" Content="BakkesMod" Name="BakkesModButton" Click="BakkesModButton_OnClick" IsEnabled="False"></Button>
+            <Button Grid.Column="3" Grid.Row="0" Height="30" Margin="20" Content="BakkesMod" Name="BakkesModButton" Click="BakkesModButton_OnClick" IsEnabled="True"></Button>
             <TextBlock Grid.Column="3" Grid.Row="1" Text="Required to do moddy stuff in game. It has a lot of functionality." TextWrapping="WrapWithOverflow" TextAlignment="Center" Foreground="White"></TextBlock>
             <Image Grid.Column="4" Grid.Row="0" Name="BakkesModDirectoryExistsIcon" Source="Resources/error.ico" Height="25" Width="25" Margin="-80 10 10 10"></Image>
 
-            <Button Grid.Column="5" Grid.Row="0" Height="30" Margin="20" Content="Rocket Plugin" Name="RocketPluginButton" Click="RocketPluginButton_OnClick" IsEnabled="False"></Button>
+            <Button Grid.Column="5" Grid.Row="0" Height="30" Margin="20" Content="Rocket Plugin" Name="RocketPluginButton" Click="RocketPluginButton_OnClick" IsEnabled="True"></Button>
             <TextBlock Grid.Column="5" Grid.Row="1" Text="A Bakkesmod plugin for joining, hosting and manipulating local games" TextWrapping="WrapWithOverflow" TextAlignment="Center" Foreground="White"></TextBlock>
             <Image Grid.Column="6" Grid.Row="0" Name="RocketPluginDirectoryExistsIcon" Source="Resources/error.ico" Height="25" Width="25" Margin="-80 10 10 10"></Image>
         </Grid>
