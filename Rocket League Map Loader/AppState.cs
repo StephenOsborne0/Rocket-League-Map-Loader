@@ -162,7 +162,7 @@ namespace RL_Map_Loader
         public static string GetSteamWorkshopPath()
         {
             var path = Path.Combine(RocketLeagueInstallDirectory, "..", "..", "workshop", "content", "252950");
-            return File.Exists(path) ? path : null;
+            return Directory.Exists(path) ? path : null;
         }
     }
 }
