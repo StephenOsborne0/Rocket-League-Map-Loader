@@ -18,11 +18,18 @@ namespace RL_Map_Loader
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
+            try
+            {
+                base.OnStartup(e);
 
-            AutoUpdater.CheckForUpdateEvent += AutoUpdaterOnCheckForUpdateEvent;
-            AutoUpdater.Start(AutoUpdateUrl);
-            RunMainApp();
+                AutoUpdater.CheckForUpdateEvent += AutoUpdaterOnCheckForUpdateEvent;
+                AutoUpdater.Start(AutoUpdateUrl);
+                RunMainApp();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.StackTrace);
+            }
         }
 
         private void AutoUpdaterOnCheckForUpdateEvent(UpdateInfoEventArgs args)

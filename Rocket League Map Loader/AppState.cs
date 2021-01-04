@@ -70,13 +70,19 @@ namespace RL_Map_Loader
             }
         }
 
-        public static readonly string TempDirectory = Path.Combine(Path.GetTempPath(), "RL Map Loader");
-        public static readonly string CookedPcDirectory = Path.Combine(RocketLeagueInstallDirectory, "TAGame", "CookedPCConsole");
-        public static readonly string LocalModsDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mods");
-        public static readonly string LocalBackupDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup");
-        public static readonly string RLModsDirectory = Path.Combine(CookedPcDirectory, "Mods");
-        public static readonly string SteamWorkshopDirectory = RocketLeagueInstallDirectory.Contains("steamapps") ? GetSteamWorkshopPath() : null;
-        public static readonly string MapCacheDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MapCache");
+        public static string CookedPcDirectory => Path.Combine(RocketLeagueInstallDirectory, "TAGame", "CookedPCConsole");
+
+        public static string TempDirectory => Path.Combine(Path.GetTempPath(), "RL Map Loader");
+
+        public static string LocalModsDirectory => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mods");
+
+        public static string LocalBackupDirectory => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup");
+
+        public static string RLModsDirectory => Path.Combine(CookedPcDirectory, "Mods");
+
+        public static string SteamWorkshopDirectory => RocketLeagueInstallDirectory.Contains("steamapps") ? GetSteamWorkshopPath() : null;
+
+        public static string MapCacheDirectory => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MapCache");
 
         public static bool RocketLeagueDirectoryIsSteam => RocketLeagueInstallDirectory.Contains("steamapps");
 
