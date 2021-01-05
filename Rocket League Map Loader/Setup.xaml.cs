@@ -28,13 +28,10 @@ namespace RL_Map_Loader
         {
             get
             {
-                var bakkesModPathWin32 = Path.Combine(RocketLeagueDirectoryTextbox.Text, "Binaries", "Win32", "bakkesmod");
-                var bakkesModPathWin64 = Path.Combine(RocketLeagueDirectoryTextbox.Text, "Binaries", "Win64", "bakkesmod");
+                var roamingAppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                var bakkesmodDataDirectory = Path.Combine(roamingAppData, "bakkesmod", "bakkesmod");
 
-                var bakkesModDirectory = Directory.Exists(bakkesModPathWin32) 
-                    ? bakkesModPathWin32 :
-                    Directory.Exists(bakkesModPathWin64) 
-                        ? bakkesModPathWin64 : null;
+                var bakkesModDirectory = Directory.Exists(bakkesmodDataDirectory) ? bakkesmodDataDirectory : null;
 
                 SetBakkesModDataDirectoryPath(bakkesModDirectory);
                 return bakkesModDirectory;
