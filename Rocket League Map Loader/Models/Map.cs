@@ -32,7 +32,19 @@ namespace RL_Map_Loader.Models
 
         public string Webpage { get; set; }
 
-        public string Hash => null; //MapFilePath != null ? HashHelper.GenerateHash(MapFilePath) : null;
+        private string _hash;
+
+        public string Hash
+        {
+            get
+            {
+                if(!string.IsNullOrEmpty(_hash))
+                    return _hash;
+
+                _hash = MapFilePath != null ? HashHelper.GenerateMD5HashFromFile(MapFilePath) : null;
+                return _hash;
+            }
+        }
 
         public DateTime DatePublished { get; set; }
 
@@ -149,6 +161,18 @@ namespace RL_Map_Loader.Models
                 map.Directory = previouslyDownloaded.Directory;
 
             return map;
+        }
+
+        public static Map TryLoadUnknownMap(string mapFile)
+        {
+            try
+            {
+                var directory = FileHelper.GetFileDirectory(mapFile);
+                var extraMapInfo = FileHelper.FindExtraMapInfo(directory);
+
+                return Map.Load(extraMapInfo, FileHelper.FindMapFile(directory));
+            }
+            catch (Exception ex) { return null; }
         }
 
         public delegate void DownloadCompletedEventHandler(DownloadCompletedEventArgs e);

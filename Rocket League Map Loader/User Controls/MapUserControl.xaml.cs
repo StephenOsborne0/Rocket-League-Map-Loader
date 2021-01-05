@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows;
+using System.Windows.Media;
 using RL_Map_Loader.Helpers;
 using RL_Map_Loader.Models;
 using MessageBox = System.Windows.MessageBox;
@@ -20,7 +22,25 @@ namespace RL_Map_Loader.User_Controls
             InitializeComponent();
             RefreshUserControlUi();
             Map.DownloadCompleted += OnDownloadCompleted;
-            Events.MapDeleted += OnMapDeleted;
+            MapLoaded += OnThisMapLoaded;
+            Loaded += OnLoaded;
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e) => UpdateMapLoaded();
+
+        private void OnThisMapLoaded(MapLoadedEventArgs e) => UpdateMapLoaded();
+
+        public void UpdateMapLoaded()
+        {
+            var currentlyLoadedMap = AppState.CurrentlyLoadedMap;
+
+            if (currentlyLoadedMap == null)
+                return;
+            
+            var mapLoadedIsThisMap = currentlyLoadedMap.Hash == _map.Hash || currentlyLoadedMap.Name == _map.Name;
+            LoadButton.Content = mapLoadedIsThisMap ? "Loaded" : "Load";
+            LoadButton.Foreground = mapLoadedIsThisMap ? Brushes.Black : Brushes.White;
+            LoadButton.IsEnabled = !mapLoadedIsThisMap;
         }
 
         public void RefreshUserControlUi()
@@ -78,24 +98,31 @@ namespace RL_Map_Loader.User_Controls
 
             foreach(var mapFile in FileHelper.FindAllMapFiles(mapDirectory))
             {
-                var destinationFilePath = Path.Combine(AppState.RLModsDirectory, "Labs_Underpass_P.upk");
+                var destinationFileName = Path.GetExtension(mapFile) == ".udk"
+                    ? "Labs_Underpass_P.upk"
+                    : Path.GetFileName(mapFile);
+                var destinationFilePath = Path.Combine(AppState.RLModsDirectory, destinationFileName);
                 File.Copy(mapFile, destinationFilePath, true);
             }
 
+            var map = Map.TryLoadUnknownMap(FileHelper.FindMapFile(mapDirectory));
+
+            if (map != null)
+                OnMapLoaded(new MapLoadedEventArgs(map));
+
             MessageBox.Show("Map installed. Please restart Rocket League to load the map.");
-
         }
 
-        private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            var mbr = MessageBox.Show($"Are you sure you want to delete {_map.Directory}?", "Delete?",
-                MessageBoxButton.YesNo);
+        //private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
+        //{
+        //    var mbr = MessageBox.Show($"Are you sure you want to delete {_map.Directory}?", "Delete?",
+        //        MessageBoxButton.YesNo);
 
-            if (mbr == MessageBoxResult.Yes)
-                Directory.Delete(_map.Directory, true);
+        //    if (mbr == MessageBoxResult.Yes)
+        //        Directory.Delete(_map.Directory, true);
 
-            AppState.RefreshDownloadedMaps();
-        }
+        //    AppState.RefreshDownloadedMaps();
+        //}
 
         private void ViewInfoButton_OnClick(object sender, RoutedEventArgs e) => new MapInfoForm(_map).Show();
 
@@ -108,9 +135,22 @@ namespace RL_Map_Loader.User_Controls
             AppState.RefreshDownloadedMaps();
         }
 
-        private void OnMapDeleted(Events.MapDeletedEventArgs e)
-        {
+        //private void OnMapDeleted(Events.MapDeletedEventArgs e)
+        //{
 
+        //}
+
+        public delegate void MapLoadedEventHandler(MapLoadedEventArgs e);
+
+        public static event MapLoadedEventHandler MapLoaded;
+
+        private static void OnMapLoaded(MapLoadedEventArgs e) => MapLoaded?.Invoke(e);
+
+        public class MapLoadedEventArgs : EventArgs
+        {
+            public Map Map;
+
+            public MapLoadedEventArgs(Map map) => Map = map;
         }
     }
 }

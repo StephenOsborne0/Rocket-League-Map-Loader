@@ -6,25 +6,21 @@ namespace RL_Map_Loader.Helpers
 {
     public class HashHelper
     {
-        public static string GenerateHash(string filepath)
+        public static string GenerateSHA256HashFromFile(string filepath) => 
+            GenerateHashFromFile(filepath, SHA256.Create());
+
+        public static string GenerateMD5HashFromFile(string filepath) => 
+            GenerateHashFromFile(filepath, new MD5CryptoServiceProvider());
+
+        public static string GenerateHashFromFile(string filepath, HashAlgorithm hashAlgorithm)
         {
-            try
-            {
-                using (var md5 = MD5.Create())
-                {
-                    using (var stream = File.OpenRead(filepath))
-                    {
-                        var hash = md5.ComputeHash(stream);
-                        return BitConverter.ToString(hash).Replace("-", "");
-                    }
-                }
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine(e);
-                return string.Empty;
-                //throw;
-            }
+            if(!File.Exists(filepath) || hashAlgorithm == null)
+                return null;
+
+            var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read) { Position = 0 };
+            var hash = BitConverter.ToString(hashAlgorithm.ComputeHash(fs)).Replace("-", string.Empty);
+            fs.Close();
+            return hash;
         }
     }
 }

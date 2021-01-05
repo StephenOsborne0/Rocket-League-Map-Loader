@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Media;
+using RL_Map_Loader.Helpers;
 using RL_Map_Loader.User_Controls;
 using static RL_Map_Loader.Helpers.InternetConnectionHelper;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
@@ -33,6 +34,7 @@ namespace RL_Map_Loader
         {
             InitializeComponent();
             Loaded += WindowLoaded;
+            MapUserControl.MapLoaded += MapLoaded;
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
@@ -61,6 +63,24 @@ namespace RL_Map_Loader
             MapsTabControl.Items.Add(new TabItem { Header = "Downloaded maps", Content = DownloadedMapsUserControl });
             MapsTabControl.Items.Add(new TabItem { Header = "Workshop maps", Content = WorkshopMapsUserControl });
             MapsTabControl.Items.Add(new TabItem { Header = "Community maps", Content = communityMapsTempGrid });
+
+            UpdateTitle();
+        }
+
+        private void MapLoaded(MapUserControl.MapLoadedEventArgs e)
+        {
+            AppState.UpdateCurrentlyLoadedMap();
+            UpdateTitle();
+        }
+
+        private void UpdateTitle()
+        {
+            var title = "RL Mod Manager";
+
+            if (AppState.CurrentlyLoadedMap != null)
+                title += $" - Currently loaded: {AppState.CurrentlyLoadedMap.Name}";
+
+            Title = title;
         }
 
         private void ExitButton_OnClick(object sender, RoutedEventArgs e) => Environment.Exit(0);

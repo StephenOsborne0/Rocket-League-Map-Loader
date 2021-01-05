@@ -138,7 +138,7 @@ namespace RL_Map_Loader.Helpers
         public static string GetDirectoryName(string directoryPath) => directoryPath.Substring(directoryPath.LastIndexOf("\\"));
 
         public static string FindMapFile(string directory) =>
-            FindAllMapFiles(directory).FirstOrDefault();
+            FindAllMapFiles(directory).FirstOrDefault(map => Path.GetExtension(map) == ".udk");
 
         public static string FindMapInfo(string directory) => 
             Directory.GetFiles(directory, "info.json", SearchOption.AllDirectories).FirstOrDefault();

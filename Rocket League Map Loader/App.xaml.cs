@@ -141,6 +141,7 @@ namespace RL_Map_Loader
                 AppState.RefreshWorkshopMaps();
 
             AppState.RefreshCommunityMaps();
+            AppState.UpdateCurrentlyLoadedMap();
         }
     }
 }

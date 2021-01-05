@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using RL_Map_Loader.Helpers;
 using RL_Map_Loader.MapGrabbers;
 using RL_Map_Loader.Models;
@@ -91,6 +92,22 @@ namespace RL_Map_Loader
         public static List<Map> WorkshopMaps = new List<Map>();
         public static List<Map> CommunityMaps = new List<Map>();
 
+        public static List<Map> AllMaps => DownloadedMaps.Union(LethsMaps).Union(WorkshopMaps).Union(CommunityMaps).ToList();
+
+        public static void UpdateCurrentlyLoadedMap()
+        {
+            var path = Path.Combine(RLModsDirectory, "Labs_Underpass_P.upk");
+
+            if (File.Exists(path))
+            {
+                var hash = HashHelper.GenerateMD5HashFromFile(path);
+                var currentlyLoadedMap = AllMaps.FirstOrDefault(map => map.Hash == hash);
+                CurrentlyLoadedMap = currentlyLoadedMap;
+            }
+        }
+
+        public static Map CurrentlyLoadedMap { get; set; }
+
         public static void RefreshLethsMaps()
         {
             if (!Directory.Exists(MapCacheDirectory))
@@ -122,7 +139,7 @@ namespace RL_Map_Loader
 
             foreach (var mapFile in FileHelper.FindAllMapFiles(LocalModsDirectory))
             {
-                var map = TryLoadUnknownMap(mapFile);
+                var map = Map.TryLoadUnknownMap(mapFile);
                 
                 if (map != null)
                     downloadedMaps.Add(map);
@@ -141,25 +158,13 @@ namespace RL_Map_Loader
             foreach(var directory in Directory.GetDirectories(SteamWorkshopDirectory))
             {
                 var mapFile = FileHelper.FindMapFile(directory);
-                var map = TryLoadUnknownMap(mapFile);
+                var map = Map.TryLoadUnknownMap(mapFile);
 
                 if (map != null)
                     workshopMaps.Add(map);
             }
 
             WorkshopMaps = workshopMaps;
-        }
-
-        public static Map TryLoadUnknownMap(string mapFile)
-        {
-            try
-            {
-                var directory = FileHelper.GetFileDirectory(mapFile);
-                var extraMapInfo = FileHelper.FindExtraMapInfo(directory);
-
-                return Map.Load(extraMapInfo, FileHelper.FindMapFile(directory));
-            }
-            catch(Exception ex) { return null; }
         }
 
         public static string GetSteamWorkshopPath()
