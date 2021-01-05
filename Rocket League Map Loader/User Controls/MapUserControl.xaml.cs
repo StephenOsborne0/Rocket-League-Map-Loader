@@ -64,7 +64,11 @@ namespace RL_Map_Loader.User_Controls
                 return;
 
             var mapFilePath = FileHelper.FindMapFile(_map?.Directory);
-            var destinationFilePath = Path.Combine(AppState.CookedPcDirectory, "Labs_Underpass_P.upk");
+            var destinationFilePath = Path.Combine(AppState.RLModsDirectory, "Labs_Underpass_P.upk");
+
+            if(!Directory.Exists(AppState.RLModsDirectory))
+                Directory.CreateDirectory(AppState.RLModsDirectory);
+            
             File.Copy(mapFilePath, destinationFilePath, true);
             MessageBox.Show("Map installed. Please restart Rocket League to load the map.");
         }

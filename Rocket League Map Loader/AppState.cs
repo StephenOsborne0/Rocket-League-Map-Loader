@@ -78,7 +78,7 @@ namespace RL_Map_Loader
 
         public static string LocalBackupDirectory => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup");
 
-        public static string RLModsDirectory => Path.Combine(CookedPcDirectory, "Mods");
+        public static string RLModsDirectory => Path.Combine(CookedPcDirectory, "rocketplugin");
 
         public static string SteamWorkshopDirectory => RocketLeagueInstallDirectory.Contains("steamapps") ? GetSteamWorkshopPath() : null;
 
@@ -116,6 +116,9 @@ namespace RL_Map_Loader
         public static void RefreshDownloadedMaps()
         {
             var downloadedMaps = new List<Map>();
+
+            if(!Directory.Exists(LocalModsDirectory))
+                Directory.CreateDirectory(LocalModsDirectory);
 
             foreach (var mapFile in FileHelper.FindAllMapFiles(LocalModsDirectory))
             {
