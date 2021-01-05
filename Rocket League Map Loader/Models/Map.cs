@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Resources;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using Newtonsoft.Json;
 using RL_Map_Loader.Helpers;
+using RL_Map_Loader.Properties;
 using static System.IO.FileMode;
 
 namespace RL_Map_Loader.Models
@@ -127,25 +131,28 @@ namespace RL_Map_Loader.Models
 
         public static Map Load(string mapInfoFile, string mapFilePath = null)
         {
-            if (mapInfoFile != null)
+            if(mapInfoFile == null)
             {
-                var json = File.ReadAllText(mapInfoFile);
-                var map = JsonConvert.DeserializeObject<Map>(json);
-
-                var imageFilePath = Path.Combine(AppState.MapCacheDirectory, $"{map.Name}.jpg");
-
-                if(File.Exists(imageFilePath)) 
-                    map.Image = new BitmapImage(new Uri(imageFilePath));
-
-                var previouslyDownloaded = AppState.DownloadedMaps.FirstOrDefault(x => x.Name == map.Name);
-
-                if(previouslyDownloaded != null)
-                    map.Directory = previouslyDownloaded.Directory;
-
-                return map;
+                return new Map(mapFilePath)
+                {
+                    Image = new BitmapImage(new Uri("/Resources/no-image-found.jpg", UriKind.Relative))
+                };
             }
 
-            return new Map(mapFilePath);
+            var json = File.ReadAllText(mapInfoFile);
+            var map = JsonConvert.DeserializeObject<Map>(json);
+            var imageFilePath = Path.Combine(AppState.MapCacheDirectory, $"{map.Name}.jpg");
+
+            map.Image =  new BitmapImage(File.Exists(imageFilePath) 
+                ? new Uri(imageFilePath) 
+                : new Uri("/Resources/no-image-found.jpg", UriKind.Relative));
+
+            var previouslyDownloaded = AppState.DownloadedMaps.FirstOrDefault(x => x.Name == map.Name);
+
+            if(previouslyDownloaded != null)
+                map.Directory = previouslyDownloaded.Directory;
+
+            return map;
         }
 
         public delegate void DownloadCompletedEventHandler(DownloadCompletedEventArgs e);

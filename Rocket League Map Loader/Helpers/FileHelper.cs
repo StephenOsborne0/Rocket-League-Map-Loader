@@ -153,5 +153,11 @@ namespace RL_Map_Loader.Helpers
         public static List<string> FindAllMapFiles(string directory) =>
             Directory.GetFiles(directory, "*.upk", SearchOption.AllDirectories)
                 .Union(Directory.GetFiles(directory, "*.udk", SearchOption.AllDirectories)).ToList();
+
+        public static void EmptyDirectory(string directory)
+        {
+            foreach (var file in Directory.GetFiles(directory))
+                File.Delete(file);
+        }
     }
 }

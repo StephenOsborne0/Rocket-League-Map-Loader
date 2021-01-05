@@ -274,5 +274,8 @@
   <ItemGroup>
     <Resource Include="Resources\xChaosLogo.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\no-image-found.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -63,14 +63,27 @@ namespace RL_Map_Loader.User_Controls
             if(_map?.Directory == null) 
                 return;
 
-            var mapFilePath = FileHelper.FindMapFile(_map?.Directory);
-            var destinationFilePath = Path.Combine(AppState.RLModsDirectory, "Labs_Underpass_P.upk");
-
-            if(!Directory.Exists(AppState.RLModsDirectory))
+            if (!Directory.Exists(AppState.RLModsDirectory))
                 Directory.CreateDirectory(AppState.RLModsDirectory);
-            
-            File.Copy(mapFilePath, destinationFilePath, true);
+
+            FileHelper.EmptyDirectory(AppState.RLModsDirectory);
+
+            var mapDirectory = _map?.Directory;
+
+            if(mapDirectory == null)
+            {
+                MessageBox.Show("Failed to find map directory");
+                return;
+            }
+
+            foreach(var mapFile in FileHelper.FindAllMapFiles(mapDirectory))
+            {
+                var destinationFilePath = Path.Combine(AppState.RLModsDirectory, "Labs_Underpass_P.upk");
+                File.Copy(mapFile, destinationFilePath, true);
+            }
+
             MessageBox.Show("Map installed. Please restart Rocket League to load the map.");
+
         }
 
         private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
