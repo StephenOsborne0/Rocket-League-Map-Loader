@@ -10,11 +10,11 @@ Future improvements:
 
 To use:
 1) Run through the initial setup.
-- If you're on an epic account then BakkesMod and Rocket plugin will not be available and thus multiplayer custom maps won't be possible.
-- If you're on steam, install Hamachi, BakkesMod and Rocket plugin for multiplayer custom map functionality.
+- Find your rocket league directory path.
+- Install Hamachi, BakkesMod and Rocket plugin for multiplayer custom map functionality.
 
 2) Wait for maps to populate in main menu.
-- Once loaded, you can click download on a map to download it.
+- Once loaded, you can click "Download" on a map to download it.
 - On a downloaded map, click "Load" to load it ready for use in rocket league. Only one custom map can be loaded at a time as this overwrites Labs_Underpass_P.upk.
 
 3) Open Hamachi and BakkesMod
