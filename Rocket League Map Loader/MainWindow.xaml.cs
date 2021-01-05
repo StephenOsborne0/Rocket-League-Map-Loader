@@ -70,8 +70,6 @@ namespace RL_Map_Loader
 
         private void AboutButton_OnClick(object sender, RoutedEventArgs e) => new About().ShowDialog();
 
-        private void UPKFileExtractorButton_OnClick(object sender, RoutedEventArgs e) { throw new NotImplementedException(); }
-
         private void ForceRestartRocketLeagueButton_OnClick(object sender, RoutedEventArgs e)
         {
             var processes = Process.GetProcesses();
@@ -168,7 +166,7 @@ namespace RL_Map_Loader
         {
             var openFileDialog = new OpenFileDialog
             {
-                DefaultExt = "UPK Files|*.upk|UDK Files|*.udk",
+                Filter = "UPK Files|*.upk|UDK Files|*.udk",
                 Multiselect = true
             };
 
@@ -238,5 +236,29 @@ namespace RL_Map_Loader
         }
 
         private void ShowSettings_OnClick(object sender, RoutedEventArgs e) => new Settings().ShowDialog();
+
+        private void UpkFileExtractorButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var upkFileExtractor = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UPK File Extractor.exe");
+
+            if (!File.Exists(upkFileExtractor))
+            {
+                MessageBox.Show("Failed to find UPK File Extractor");
+                return;
+            }
+
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "UPK Files|*.upk|UDK Files|*.udk",
+                Multiselect = false
+            };
+
+            var dr = openFileDialog.ShowDialog();
+
+            if (dr != System.Windows.Forms.DialogResult.OK)
+                return;
+
+            Process.Start(upkFileExtractor, $"\"{openFileDialog.FileName}\"");
+        }
     }
 }

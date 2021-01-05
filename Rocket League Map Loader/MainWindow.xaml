@@ -22,7 +22,6 @@
                     <MenuItem Header="_Import">
                         <MenuItem Header="_Unity Package" Name="ImportUnityPackagesButton" Click="ImportUnityPackagesButton_OnClick"></MenuItem>
                     </MenuItem>
-                    <!--<MenuItem Header="_Restore default files" Name="RestoreDefaultFilesButton"/>-->
                     <!--<MenuItem Header="_Clear cache" Name="ClearCacheButton" Click="ClearCacheButton_OnClick"></MenuItem>-->
                     <MenuItem Header="_Launch Hamachi" Name="LaunchHamachiButton" Click="LaunchHamachiButton_OnClick"></MenuItem>
                     <MenuItem Header="_Launch BakkesMod" Name="LaunchBakkesModButton" Click="LaunchBakkesModButton_OnClick"></MenuItem>
@@ -44,7 +43,7 @@
                 <MenuItem Header="_View">
                     <MenuItem Header="_Mods folder" Name ="ViewModsFolderButton" Click="ViewModsFolderButton_OnClick"/>
                     <MenuItem Header="_Show external IP" Name ="ShowExternalIpButton" Click="ShowExternalIpButton_OnClick"/>
-                    <!--<MenuItem Header="_UPK file extractor" Name ="UPKFileExtractorButton" Click="UPKFileExtractorButton_OnClick"/>-->
+                    <MenuItem Header="_UPK file extractor" Name ="UpkFileExtractorButton" Click="UpkFileExtractorButton_OnClick"/>
                 </MenuItem>
 
                 <MenuItem Header="_About" Name="AboutButton" Click="AboutButton_OnClick"></MenuItem>

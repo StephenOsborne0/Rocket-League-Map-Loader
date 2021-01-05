@@ -277,5 +277,11 @@
   <ItemGroup>
     <Resource Include="Resources\no-image-found.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Users\Azure\source\repos\UPK File Extractor\UPK File Extractor\UPK File Extractor.csproj">
+      <Project>{57d3f9b6-b580-4f1b-90e4-289803457515}</Project>
+      <Name>UPK File Extractor</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

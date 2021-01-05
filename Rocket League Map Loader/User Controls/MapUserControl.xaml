@@ -12,7 +12,7 @@
             <ColumnDefinition Width="3*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Image Grid.Column="0" Margin="10" Name="MapImageBox"><!-- Map image --></Image>
+        <Image Grid.Column="0" Margin="10" Name="MapImageBox"></Image>
 
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
