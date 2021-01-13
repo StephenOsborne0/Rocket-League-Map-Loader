@@ -8,7 +8,6 @@
         Title="RL Mod Manager" Height="450" Width="800"
         Icon="Resources/xChaosLogo.ico">
 
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="17"></RowDefinition>

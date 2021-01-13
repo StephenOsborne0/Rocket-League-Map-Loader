@@ -125,7 +125,7 @@ namespace RL_Map_Loader
 
             var path = RegistryHelper.FindExecutableFilePath("hamachi-2-ui.exe");
 
-            if(path == null) 
+            if (path == null) 
                 return;
 
             AppState.HamachiDirectory = path.Substring(0, path.IndexOf("hamachi-2-ui.exe", StringComparison.Ordinal));
@@ -168,6 +168,8 @@ namespace RL_Map_Loader
 
             if(folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 RocketLeagueDirectoryTextbox.Text = folderBrowserDialog.SelectedPath;
+
+            UpdateRocketLeagueDirectoryExists();
         }
 
         private void HamachiButton_OnClick(object sender, RoutedEventArgs e)
