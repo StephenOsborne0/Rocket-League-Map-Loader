@@ -137,8 +137,13 @@ namespace RL_Map_Loader.Helpers
 
         public static string GetDirectoryName(string directoryPath) => directoryPath.Substring(directoryPath.LastIndexOf("\\"));
 
-        public static string FindMapFile(string directory) =>
-            FindAllMapFiles(directory).FirstOrDefault(map => Path.GetExtension(map) == ".udk");
+        public static string FindMapFile(string directory)
+        {
+            var mapFiles = FindAllMapFiles(directory);
+
+            return mapFiles.FirstOrDefault(map => Path.GetExtension(map) == ".udk") ?? 
+                   mapFiles.FirstOrDefault(map => Path.GetExtension(map) == ".upk");
+        }
 
         public static string FindMapInfo(string directory) => 
             Directory.GetFiles(directory, "info.json", SearchOption.AllDirectories).FirstOrDefault();
