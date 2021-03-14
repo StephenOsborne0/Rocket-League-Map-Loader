@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
 using System.Net;
 using System.Windows;
 using AutoUpdaterDotNET;
@@ -18,22 +19,22 @@ namespace RL_Map_Loader
 
         protected override void OnStartup(StartupEventArgs e)
         {
-#if !DEBUG
             try
             {
-#endif
                 base.OnStartup(e);
 
                 AutoUpdater.CheckForUpdateEvent += AutoUpdaterOnCheckForUpdateEvent;
                 AutoUpdater.Start(AutoUpdateUrl);
+
+                if (!Directory.Exists(AppState.TempDirectory))
+                    Directory.CreateDirectory(AppState.TempDirectory);
+
                 RunMainApp();
-#if !DEBUG
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.StackTrace);
             }
-#endif
         }
 
         private void AutoUpdaterOnCheckForUpdateEvent(UpdateInfoEventArgs args)

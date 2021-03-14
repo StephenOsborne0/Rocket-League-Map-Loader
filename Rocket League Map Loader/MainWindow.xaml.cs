@@ -90,18 +90,23 @@ namespace RL_Map_Loader
 
         private void AboutButton_OnClick(object sender, RoutedEventArgs e) => new About().ShowDialog();
 
-        private void ForceRestartRocketLeagueButton_OnClick(object sender, RoutedEventArgs e)
+
+        private Process GetRocketLeagueProcess() => Process.GetProcesses().FirstOrDefault(x => x.ProcessName == "RocketLeague");
+
+        private void KillProcess(Process rocketLeagueProcess)
         {
-            var processes = Process.GetProcesses();
-            var rocketLeagueProcess = processes.FirstOrDefault(x => x.ProcessName == "RocketLeague");
-
-            if(rocketLeagueProcess == null) 
-                return;
-
             rocketLeagueProcess.Kill();
 
             while (!rocketLeagueProcess.HasExited)
                 Thread.Sleep(100);
+        }
+
+        private void ForceRestartRocketLeagueButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var rocketLeagueProcess = GetRocketLeagueProcess();
+
+            if (rocketLeagueProcess != null)
+                KillProcess(rocketLeagueProcess);
 
             LaunchRocketLeagueButton_OnClick(sender, e);
         }
@@ -279,6 +284,29 @@ namespace RL_Map_Loader
                 return;
 
             Process.Start(upkFileExtractor, $"\"{openFileDialog.FileName}\"");
+        }
+
+        private void RemoveCurrentlyInstalledMapButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!Directory.Exists(AppState.RLModsDirectory))
+            {
+                MessageBox.Show("Rocket league mods directory not found.");
+                return;
+            }
+
+            var mr = MessageBox.Show("This will close rocket league, do you wish to continue?", "Warning", MessageBoxButton.YesNo);
+
+            if (mr == MessageBoxResult.No)
+                return;
+
+            var rocketLeagueProcess = GetRocketLeagueProcess();
+
+            if (rocketLeagueProcess != null)
+                KillProcess(rocketLeagueProcess);
+
+            FileHelper.FindAllMapFiles(AppState.RLModsDirectory).ForEach(m => File.Delete(m));
+            AppState.UpdateCurrentlyLoadedMap();
+            UpdateTitle();
         }
     }
 }

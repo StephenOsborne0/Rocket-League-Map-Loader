@@ -174,55 +174,67 @@ namespace RL_Map_Loader
 
         private void HamachiButton_OnClick(object sender, RoutedEventArgs e)
         {
-            var url = "https://secure.logmein.com/hamachi.msi";
-            var temp = Path.Combine(AppState.TempDirectory, "Hamachi installer.msi");
-            new WebClient().DownloadFile(url, temp);
-
-            var process = new Process
+            try
             {
-                StartInfo = new ProcessStartInfo(temp)
-            };
+                var url = "https://secure.logmein.com/hamachi.msi";
+                var temp = Path.Combine(AppState.TempDirectory, "Hamachi installer.msi");
+                new WebClient().DownloadFile(url, temp);
 
-            process.Exited += HamachiInstalledCallback;
-            process.Start();
+                var process = new Process
+                {
+                    StartInfo = new ProcessStartInfo(temp)
+                };
+
+                process.Exited += HamachiInstalledCallback;
+                process.Start();
+            }
+            catch(Exception ex) { MessageBox.Show($"{ex.Message}\n{ex.StackTrace}"); }
         }
 
         private void BakkesModButton_OnClick(object sender, RoutedEventArgs e)
         {
-            if (!RocketLeagueDirectoryIsValid)
+            try
             {
-                MessageBox.Show("Please select a valid rocket league directory first.");
-                return;
+                if(!RocketLeagueDirectoryIsValid)
+                {
+                    MessageBox.Show("Please select a valid rocket league directory first.");
+                    return;
+                }
+
+                var extractionDirectory = FirstTimeRun.SetupBakkesMod();
+
+                var process = new Process
+                {
+                    StartInfo = new ProcessStartInfo(Path.Combine(extractionDirectory, "BakkesModSetup.exe"))
+                };
+
+                process.Exited += BakkesModInstalledCallback;
+                process.Start();
             }
-
-            var extractionDirectory = FirstTimeRun.SetupBakkesMod();
-
-            var process = new Process
-            {
-                StartInfo = new ProcessStartInfo(Path.Combine(extractionDirectory, "BakkesModSetup.exe"))
-            };
-
-            process.Exited += BakkesModInstalledCallback;
-            process.Start();
+            catch(Exception ex) { MessageBox.Show($"{ex.Message}\n{ex.StackTrace}"); }
         }
 
         private void RocketPluginButton_OnClick(object sender, RoutedEventArgs e)
         {
-            if(!RocketLeagueDirectoryIsValid)
+            try
             {
-                MessageBox.Show("Please select a valid rocket league directory first.");
-                return;
-            }
+                if (!RocketLeagueDirectoryIsValid)
+                {
+                    MessageBox.Show("Please select a valid rocket league directory first.");
+                    return;
+                }
 
-            if (BakkesModDataDirectory == null)
-            {
-                MessageBox.Show(
-                    "Failed to find BakkesMod install directory. Please make sure that you install BakkesMod before Rocket Plugin");
-                return;
-            }
+                if (BakkesModDataDirectory == null)
+                {
+                    MessageBox.Show(
+                        "Failed to find BakkesMod install directory. Please make sure that you install BakkesMod before Rocket Plugin");
+                    return;
+                }
 
-            FirstTimeRun.InstallRocketPlugin(BakkesModDataDirectory);
-            RocketPluginInstalledCallback(this, new EventArgs());
+                FirstTimeRun.InstallRocketPlugin(BakkesModDataDirectory);
+                RocketPluginInstalledCallback(this, new EventArgs());
+            }
+            catch (Exception ex) { MessageBox.Show($"{ex.Message}\n{ex.StackTrace}"); }
         }
 
         private void CompleteSetupButton_OnClick(object sender, RoutedEventArgs e)

@@ -15,6 +15,7 @@ namespace RL_Map_Loader.Helpers
             try
             {
                 BackupUnderpassMap();
+                CreateBackupDirectory();
                 InstallWorkshopTextures();
                 CreateLocalModsDirectory();
                 CreateRocketLeagueModsDirectory();
@@ -27,7 +28,8 @@ namespace RL_Map_Loader.Helpers
             }
             catch(Exception ex)
             {
-                MessageBox.Show($"Error during initial install: {ex.Message}");
+                MessageBox.Show($"Error during initial install: {ex.Message}\n\n{ex.StackTrace}");
+                MessageBox.Show($"Inner exception: {ex.InnerException.Message}\n\n{ex.InnerException.StackTrace}");
                 return false;
             }
         }
@@ -51,13 +53,21 @@ namespace RL_Map_Loader.Helpers
 
         public static void BackupUnderpassMap()
         {
-            var path = Path.Combine(AppState.CookedPcDirectory, "Labs_Underpass_P.upk");
-            FileHelper.BackupFile(path, AppState.LocalBackupDirectory);
+            try
+            {
+                var path = Path.Combine(AppState.CookedPcDirectory, "Labs_Underpass_P.upk");
+                FileHelper.BackupFile(path, AppState.LocalBackupDirectory);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to backup underpass map file: {ex.Message}\n\n{ex.StackTrace}", ex);
+            }
         }
 
         public static string SetupBakkesMod()
         {
             var url = "https://download.bakkesmod.com/BakkesModSetup.zip";
+
             var temp = Path.Combine(AppState.TempDirectory, "BakkesMod.zip");
             new WebClient().DownloadFile(url, temp);
 
@@ -88,30 +98,58 @@ namespace RL_Map_Loader.Helpers
 
         private static void CreateLocalModsDirectory()
         {
-            if(!Directory.Exists(AppState.LocalModsDirectory))
-                Directory.CreateDirectory(AppState.LocalModsDirectory);
+            try
+            {
+                if(!Directory.Exists(AppState.LocalModsDirectory))
+                    Directory.CreateDirectory(AppState.LocalModsDirectory);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to create local mods directory: {ex.Message}\n\n{ex.StackTrace}", ex);
+            }
         }
 
         private static void CreateBackupDirectory()
         {
-            if (!Directory.Exists(AppState.LocalBackupDirectory))
-                Directory.CreateDirectory(AppState.LocalBackupDirectory);
+            try
+            {
+                if (!Directory.Exists(AppState.LocalBackupDirectory))
+                    Directory.CreateDirectory(AppState.LocalBackupDirectory);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to create local backup directory: {ex.Message}\n\n{ex.StackTrace}", ex);
+            }
         }
 
         private static void CreateRocketLeagueModsDirectory()
         {
-            if(!Directory.Exists(AppState.RLModsDirectory))
-                Directory.CreateDirectory(AppState.RLModsDirectory);
+            try
+            {
+                if(!Directory.Exists(AppState.RLModsDirectory))
+                    Directory.CreateDirectory(AppState.RLModsDirectory);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to create rocket league mods directory: {ex.Message}\n\n{ex.StackTrace}", ex);
+            }
         }
 
         private static void CopyExistingMods()
         {
-            if(!Directory.Exists(AppState.LocalModsDirectory)) 
-                return;
+            try
+            {
+                if(!Directory.Exists(AppState.LocalModsDirectory))
+                    return;
 
-            foreach(var upk in Directory.GetFiles(AppState.RLModsDirectory, "*.upk")
-                .Union(Directory.GetFiles(AppState.RLModsDirectory, "*.udk"))) 
-                BackupModFile(upk);
+                foreach(var upk in Directory.GetFiles(AppState.RLModsDirectory, "*.upk")
+                    .Union(Directory.GetFiles(AppState.RLModsDirectory, "*.udk")))
+                    BackupModFile(upk);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to copy existing mod files: {ex.Message}\n\n{ex.StackTrace}", ex);
+            }
         }
 
         private static void BackupModFile(string fileName)
@@ -126,14 +164,28 @@ namespace RL_Map_Loader.Helpers
 
         private static void InstallWorkshopTextures()
         {
-            var googleDriveId = "1te3LAFnmeKUemYHiIcmu-tnu_0uF4dSR";
-            var downloadedFile = GoogleDrive.Download(googleDriveId);
-            var tempDir = Path.Combine(AppState.TempDirectory, "Workshop Textures");
+            try
+            {
+                //Allows bypassing of the workshop textures file for the setup in case
+                //user's security blocks google drive cookie access
+                var zipFile = Path.Combine(AppState.TempDirectory, "Workshop-textures.zip");
 
-            FileHelper.ExtractZipFile(downloadedFile, null, tempDir);
+                if(!File.Exists(zipFile))
+                {
+                    var googleDriveId = "1te3LAFnmeKUemYHiIcmu-tnu_0uF4dSR";
+                    zipFile = GoogleDrive.Download(googleDriveId);
+                }
 
-            foreach(var file in Directory.GetFiles(tempDir))
-                FileHelper.MoveFile(file, AppState.CookedPcDirectory, true, AppState.LocalBackupDirectory);
+                var tempDir = Path.Combine(AppState.TempDirectory, "Workshop Textures");
+                FileHelper.ExtractZipFile(zipFile, null, tempDir);
+
+                foreach(var file in Directory.GetFiles(tempDir))
+                    FileHelper.MoveFile(file, AppState.CookedPcDirectory, true, AppState.LocalBackupDirectory);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to install workshop textures: {ex.Message}\n\n{ex.StackTrace}", ex);
+            }
         }
     }
 }

@@ -37,6 +37,7 @@
                     <MenuItem Header="_Refresh Lethamyr's maps" Name="RefreshLethamyrsMapsButton" Click="RefreshLethamyrsMapsButton_OnClick"></MenuItem>
                     <MenuItem Header="_Refresh workshop maps" Name="RefreshWorkshopMapsButton" Click="RefreshWorkshopMapsButton_OnClick"></MenuItem>
                     <MenuItem Header="_Refresh community maps" Name="RefreshCommunityMapsButton" Click="RefreshCommunityMapsButton_OnClick"></MenuItem>
+                    <MenuItem Header="_Remove currently installed map" Name="RemoveCurrentlyInstalledMapButton" Click="RemoveCurrentlyInstalledMapButton_Click"></MenuItem>
                 </MenuItem>
 
                 <MenuItem Header="_View">

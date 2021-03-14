@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using RL_Map_Loader.Helpers;
@@ -96,9 +97,40 @@ namespace RL_Map_Loader.User_Controls
                 return;
             }
 
-            foreach(var mapFile in FileHelper.FindAllMapFiles(mapDirectory))
+            var allMapFiles = FileHelper.FindAllMapFiles(mapDirectory);
+            var udks = allMapFiles.FirstOrDefault(m => Path.GetExtension(m) == ".udk");
+            var upks = allMapFiles.Where(m => Path.GetExtension(m) == ".upk").ToList();
+
+            if (udks != null)
             {
-                var destinationFileName = Path.GetExtension(mapFile) == ".udk"
+                //Rename the udk file, leave the rest as is
+                foreach(var mapFile in allMapFiles)
+                {
+                    var destinationFileName = (mapFile == udks)
+                        ? "Labs_Underpass_P.upk"
+                        : Path.GetFileName(mapFile);
+                    var destinationFilePath = Path.Combine(AppState.RLModsDirectory, destinationFileName);
+                    File.Copy(mapFile, destinationFilePath, true);
+                }
+            }
+            else if (upks.Count == 1)
+            {
+                //Rename the only upk file and move it
+                var destinationFileName = "Labs_Underpass_P.upk";
+                var destinationFilePath = Path.Combine(AppState.RLModsDirectory, destinationFileName);
+                File.Copy(upks.First(), destinationFilePath, true);
+            }
+            else
+            {
+                //Too many upks for us to tell which one is the main one.
+                //Maybe we read the file format to figure it out?
+                MessageBox.Show("Unsure of which upk needs renaming. Either copy and rename the files manually or contact me on Discord for help.");
+                return;
+            }
+
+            foreach (var mapFile in FileHelper.FindAllMapFiles(mapDirectory))
+            {
+                var destinationFileName = (Path.GetExtension(mapFile) == ".udk" || Path.GetExtension(mapFile) == ".upk")
                     ? "Labs_Underpass_P.upk"
                     : Path.GetFileName(mapFile);
                 var destinationFilePath = Path.Combine(AppState.RLModsDirectory, destinationFileName);
